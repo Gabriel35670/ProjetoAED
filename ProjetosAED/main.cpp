@@ -22,7 +22,7 @@ int main(){
 
     while(!Cheia(P1)){
 
-        cout<<"Qual valor adicionar na P1(-999 para parar): ";
+        cout<<"Qual valor adicionar na P1(so para quando cheia): ";
         cin>>entrada;
 
         if(entrada != "\0"){
@@ -35,7 +35,7 @@ int main(){
 
     while(!Cheia(P2)){
 
-        cout<<"Qual valor adicionar na P2(-999 para parar): ";
+        cout<<"Qual valor adicionar na P2(so para quando cheia): ";
         cin>>entrada;
 
         if(entrada != "\0"){

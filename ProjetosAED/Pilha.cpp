@@ -111,6 +111,9 @@ void imprimePILHA(PILHA *P){
 PILHA* LiberarPilha(PILHA *P){
 
     No *aux;
+    fruta *f;
+    f = criaFruta("MELAO");
+    aux = criaNo(f);
     while(!Vazia(P)){
         Desempilhar(P,aux);
     }
