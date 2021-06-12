@@ -17,27 +17,31 @@ int main(){
     P1 = CriarPilha(t1);
     P2 = CriarPilha(t2);
 
-    int entrada=0;
+    string entrada;
     No *noh;
-    while(entrada != -999){
 
-        cout<<"Qual valor adicionar na P1(-999 para parar): ";
+    while(!Cheia(P1)){
+
+        cout<<"Qual valor adicionar na P1(so para quando cheia): ";
         cin>>entrada;
 
-        if(entrada != -999){
-            noh = criaNo(entrada);
+        if(entrada != "\0"){
+            fruta *f;
+            f = criaFruta(entrada);
+            noh = criaNo(f);
             Empilhar(P1,noh);
         }
     }
-    entrada =0;
 
-    while(entrada != -999){
+    while(!Cheia(P2)){
 
-        cout<<"Qual valor adicionar na P2(-999 para parar): ";
+        cout<<"Qual valor adicionar na P2(so para quando cheia): ";
         cin>>entrada;
 
-        if(entrada != -999){
-            noh = criaNo(entrada);
+        if(entrada != "\0"){
+            fruta *f2;
+            f2 = criaFruta(entrada);
+            noh = criaNo(f2);
             Empilhar(P2,noh);
         }
     }
@@ -48,6 +52,10 @@ int main(){
     cout<<"\n";
 
     string op = "s";
+    
+    fruta *auxiliar;
+    auxiliar = criaFruta("sla");
+
 
     while(op == "s" || op == "S"){
 
@@ -55,9 +63,9 @@ int main(){
         cin>>op;
 
         if(op == "s" || op == "S"){
-            noh = criaNo(0);
+            noh = criaNo(auxiliar);
             Desempilhar(P1,noh);
-            cout<<"O valor retirado foi: {"<<noh->valor<<"}.\n";
+            cout<<"O valor retirado foi: {"<<noh->f->nome<<"}.\n";
         }
     }
 
@@ -69,9 +77,9 @@ int main(){
         cin>>op;
 
         if(op == "s" || op == "S"){
-            noh = criaNo(0);
+            noh = criaNo(auxiliar);
             Desempilhar(P2,noh);
-            cout<<"O valor retirado foi: {"<<noh->valor<<"}.\n";
+            cout<<"O valor retirado foi: {"<<noh->f->nome<<"}.\n";
         }
     }
 

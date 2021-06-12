@@ -50,8 +50,16 @@ int Jogo::getTempoSeq() const
 
 void Jogo::embaralha(PILHA *P)
 {
-    vector<Fruta> frutas;
+    vector<Fruta *> frutas;
     unsigned seed = chrono::system_clock::now().time_since_epoch().count(); //gera uma "seed" aleatoria
 
     shuffle(frutas.begin(), frutas.end(), default_random_engine(seed));
+
+    for (int i = 0; i < frutas.size(); i++)
+    {
+        No *N;
+        N = new No;
+        N->f = frutas[i];
+        Empilhar(P, N);
+    }
 }

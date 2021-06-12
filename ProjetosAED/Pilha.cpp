@@ -61,7 +61,7 @@ bool Desempilhar(PILHA *P,No *X){
     No *lixo;
     
     lixo = P->topo;
-    X->obj.setNome(P->topo->obj.getNome());
+    X->f = P->topo->f;
     P->topo = P->topo->proximo;
     
     /*if(P->topo != NULL)
@@ -81,7 +81,7 @@ int ComparaPilhas(PILHA *P1, PILHA *P2){
 
     while(N1 != NULL && N2 != NULL){
 
-        if(N1->obj == N2->obj){
+        if(igual(N1->f,N2->f)){
             
             //cout<<"O valor de N1= "<<N1->valor<<" eh igual ao valor de N2= "<<N2->valor<<".\n";
             igualdades++;
@@ -101,7 +101,7 @@ void imprimePILHA(PILHA *P){
     int contador=0;
 
     while(aux != NULL){
-        cout<<"P["<<contador<<"] = "<<aux->obj.getNome()<<"\n";
+        cout<<"P["<<contador<<"] = "<<aux->f->nome<<"\n";
         contador ++;
         aux = aux->proximo;
     }
@@ -111,6 +111,9 @@ void imprimePILHA(PILHA *P){
 PILHA* LiberarPilha(PILHA *P){
 
     No *aux;
+    fruta *f;
+    f = criaFruta("MELAO");
+    aux = criaNo(f);
     while(!Vazia(P)){
         Desempilhar(P,aux);
     }
