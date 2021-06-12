@@ -1,0 +1,58 @@
+
+
+
+                                                                TIMER
+
+
+            Pilha Final                                         
+            |
+            |
+            |
+            |
+            |
+            |
+            |
+            |
+            |
+            |
+            |
+            |
+            |
+            |
+            \
+            |
+            |
+            \
+            \
+            |
+            |
+            |
+            |
+            ||
+            \
+            \
+            \                                                       Area de "descarte"
+
+
+Pilha Final: Aqui serão colocados os objetos em ordem, podem sim ser retirados, eles entram quando se coloca um objeto sobre a "regiao" da pilha, caso isso
+aconteça a função "Empilha" é acionada, caso se valor seja verdadeiro, o objeto irá cair até o topo da pilha(com gravidade) se tornando assim o topo da pró
+pria pilha, caso o valor seja falso, o objeto irá retornar à posição que estava alocada
+
+Area de "descarte": Aqui ficarão os objetos que deverão ser empilhados, caso seja necessário empilhar 5 objetos, terão apenas 5 objetos, cada objeto estará em
+pilhas intermediária de tamanho máximo de 1, como haverão apenas 5 objetos disponíveis, e o tamanho maximo da Pilha final será 5, é impossivel sobrar objetos
+oque facilita a implementação, a pilha não é destruída após seu único elemento ser retirado, ela fica dispónivel para o retorno de um objeto, caso seja necessária
+a reorganização da Pilha final, nesse caso, na possibilidade de inserir um elemento da Pilha final em uma Pilha intermediaria que esteja lotada(ou seja, tenha
+seu único objeto), o objeto que está no topo da Pilha final, irá retornar para o topo da Pilha final.
+
+
+
+O que será necessário:
+
+->Uma struct que representa os Nós da pilha, esses nós devem conter um ponteiro que aponta para o proximo nó da pilha, e um atributo "Objeto" que representa
+o objeto do nó, resumindo caso o objeto de uso seja "frutas" na struct No, terá um ponteiro para No, e uma classe fruta, que terá uma imagem
+
+->Uma classe jogador, que contém os pontos do jogador e seu nome
+
+->(não sei)Uma classe tabuleiro, para conter um plano de fundo ou sla oq(detalhes da interface)
+
+->Uma classe jogo, que contenha um vetor de Jogadores, e contenha um atributo rodadas, que controle o jogo.
