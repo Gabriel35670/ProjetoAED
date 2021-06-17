@@ -9,14 +9,14 @@ void menu(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click
 	Button *b_single,*b_multi, *b_config;
 
 	//BITMAPS
-	single = load_bitmap("BITMAPS/Single.bmp", NULL);
-  	single_highlight = load_bitmap("BITMAPS/Single_Highlight.bmp", NULL);
+	single = load_bitmap("BITMAPS/Tittle/Single.bmp", NULL);
+  	single_highlight = load_bitmap("BITMAPS/Tittle/Single_Highlight.bmp", NULL);
 
-  	multi = load_bitmap("BITMAPS/Multi.bmp", NULL);
-  	multi_highlight = load_bitmap("BITMAPS/Multi_Highlight.bmp", NULL);
+  	multi = load_bitmap("BITMAPS/Tittle/Multi.bmp", NULL);
+  	multi_highlight = load_bitmap("BITMAPS/Tittle/Multi_Highlight.bmp", NULL);
 
-	config = load_bitmap("BITMAPS/Config.bmp",NULL);
-	config_highlight = load_bitmap("BITMAPS/Config_Highlight.bmp", NULL);
+	config = load_bitmap("BITMAPS/Tittle/Config.bmp",NULL);
+	config_highlight = load_bitmap("BITMAPS/Tittle/Config_Highlight.bmp", NULL);
 		
 	//BUTTONS
 	b_single = create_button(single, single_highlight,click,90, height/1.3);
@@ -88,27 +88,60 @@ void menu(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click
 }
 END_OF_FUNCTION(menu)
 
-void single_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click,int height,int width,int *screen_state){
+void single_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click,int height,int width,int *screen_state,Jogador *j){
 
-	
+	BITMAP *nome,*voltar,*voltar_highlight,*start,*start_highlight;
+	Button *b_start,*b_voltar;
+
 	bool exit_screen = false;
 
+	//BITMAPS
+	voltar = load_bitmap("BITMAPS/Single/voltar.bmp", NULL);
+  	voltar_highlight = load_bitmap("BITMAPS/Single/voltar_highlight.bmp", NULL);
+
+	start = load_bitmap("BITMAPS/Single/start.bmp", NULL);
+  	start_highlight = load_bitmap("BITMAPS/Single/start_highlight.bmp", NULL);
+
+	nome = load_bitmap("BITMAPS/Single/nome.bmp",NULL);
+
+	//BUTTONS
+	b_start = create_button(start, start_highlight,click,width/1.2, height/1.2);
+  	b_voltar = create_button(voltar, voltar_highlight,click,width/12, height/11.5);
+	
 	while (!(key[KEY_ESC] || exit_screen))
 	{		
 
 		//Botoes iniciados
+		button_input(b_start);
+		button_input(b_voltar);
 		
 	
 		//Tela de fundo
 		draw_sprite(buffer,logo,0, 0);
 
+		//BITMAPS
+		draw_sprite(buffer,nome,width/6,height/3);
+
 		//Titulo do jogo
 		textprintf_centre_ex(buffer, verdana, width/2, height/12, 0x0, -1,"Single screen");
-		
+		textprintf_centre_ex(buffer, verdana, width/2.7, height/2.9, 0x0, -1,"%s",j->getNome().c_str());
 		//UPDATE
+		if(b_start->ativado){
+			exit_screen = true;
+			*screen_state = MEMORYSCREEN;
+		}
+		else if(b_voltar->ativado){
+			exit_screen = true;
+			*screen_state = TITLESCREEN;
+			j->controlaCont(1);
+			delete j;
+
+		}
 
 		//BUTTONS
-
+		button_draw(b_start, buffer);
+    	button_draw(b_voltar, buffer);
+		
 		//MOUSE
 		draw_sprite(buffer,cursor,mouse_x-6,mouse_y-6);
 
@@ -194,6 +227,16 @@ void memory_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMP
 
 	
 	bool exit_screen = false;
+	/*Jogo game(30,1.30);
+	PILHA *P1;
+
+	P1 = CriarPilha(5);
+	game.embaralha(P1);
+	*/
+	//int tamanho = P1->tamanhoMAX;
+	
+	inicia_timer();
+	//int controle = getTimer();
 
 	while (!(key[KEY_ESC] || exit_screen))
 	{		
@@ -205,9 +248,22 @@ void memory_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMP
 		draw_sprite(buffer,logo,0, 0);
 
 		//Titulo do jogo
-		textprintf_centre_ex(buffer, verdana, width/2, height/12, 0x0, -1,"MEMORY SCREEN");
-		
+		textprintf_centre_ex(buffer, verdana, width/2, height/12, 0x0, -1,"Pilha Correta, memorize a ordem!");
+
+		//TIMER
+		textprintf_centre_ex(buffer, verdana, SCREEN_W/2, SCREEN_H/9, makecol(0,0,0), -1,
+       "%02d: %02d",(((getTimer()/1000)/60)%60) ,((getTimer()/1000)%60));
+
+		//BITMAPS
+		//imprimePILHA(P1,buffer,widhth,height);
+
+
 		//UPDATE
+		if(((getTimer()/1000)%60) == 30){
+			exit_screen = true;
+			*screen_state = GAMESCREEN;
+			trava_timer();
+		}
 
 		//BUTTONS
 
@@ -221,6 +277,8 @@ void memory_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMP
 		rest(10);
 		clear(buffer);	
 	}
+	//P1 = LiberarPilha(P1);
+
 }
 END_OF_FUNCTION(memory_screen)
 
@@ -228,6 +286,7 @@ void game_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE
 
 	
 	bool exit_screen = false;
+	
 
 	while (!(key[KEY_ESC] || exit_screen))
 	{		

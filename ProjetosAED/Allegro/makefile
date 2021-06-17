@@ -1,23 +1,21 @@
 all : main
 
-<<<<<<< HEAD
-main : main.o button.o screen.o
-	g++ main.o button.o screen.o -Wall -Werror -Werror=vla -pedantic-errors -g -lm -o main `allegro-config --libs` 
+main : main.o screen.o buttons/button.o  Jogador/Jogador.o timer/timer.o 
+	g++ main.o screen.o buttons/button.o Jogador/Jogador.o timer/timer.o -Wall -Werror -Werror=vla -pedantic-errors -g -lm -o main `allegro-config --libs` 
 
-main.o : main.cpp button.h screen.h
+main.o : main.cpp screen.h buttons/button.h Jogador/Jogador.h timer/timer.h
 	g++ -Wall -Werror -Werror=vla -pedantic-errors -g -lm -c main.cpp `allegro-config --libs` 
 
+screen.o : screen.cpp screen.h buttons/button.h Jogador/Jogador.h timer/timer.h  
+	g++ -Wall -Werror -Werror=vla -pedantic-errors -g -lm -c screen.cpp 
 
-screen.o : screen.cpp screen.h button.h
-	g++ -Wall -Werror -Werror=vla -pedantic-errors -g -lm -c screen.cpp
-	
-=======
-main : main.o button.o
-	g++ main.o button.o -Wall -Werror -Werror=vla -pedantic-errors -g -lm -o main `allegro-config --libs` 
+button.o : buttons/button.cpp buttons/button.h
+	g++ -Wall -Werror -Werror=vla -pedantic-errors -g -lm -c button.cpp 
 
-main.o : main.cpp button.h
-	g++ -Wall -Werror -Werror=vla -pedantic-errors -g -lm -c main.cpp `allegro-config --libs` 
+Jogador.o: Jogador/Jogador.cpp Jogador/Jogador.h
+	g++ -Wall -Werror -Werror=vla -pedantic-errors -g -lm -c Jogador.cpp
 
->>>>>>> 24f98359048ea0fd5e3834a56de28e0ca5973f86
-button.o : button.cpp button.h
-	g++ -Wall -Werror -Werror=vla -pedantic-errors -g -lm -c button.cpp
+timer.o: timer/timer.cpp timer/timer.h
+	g++ -Wall -Werror -Werror=vla -pedantic-errors -g -lm -c timer.cpp
+
+
