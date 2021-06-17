@@ -7,7 +7,6 @@ PILHA* CriarPilha(int tamanhoMAX){
     P->tamanhoMAX = tamanhoMAX;
     P->topo = NULL;
     
-    //cout<<"Pilha de tamanho {"<<P->tamanhoMAX<<"} criado.\n";
 
     return P;
 }
@@ -20,7 +19,6 @@ bool Cheia(PILHA *P){
         contador++;
     }
     
-    //cout<<"Atualmente a fila tem: "<<contador<<" valore(s).\n";
     return contador == P->tamanhoMAX;
 }
 
@@ -32,12 +30,9 @@ bool Vazia(PILHA *P){
 bool Empilhar(PILHA *P,No *novo){
 
     if(Cheia(P) || novo == NULL){
-        //cout<<"Pilha cheia/No invalido.\n";
         return false;
     }
     else{
-        //cout<<"Pilha nao cheia.\n";
-
         if(Vazia(P)){
             novo->proximo = NULL;
             P->topo = novo;
@@ -55,7 +50,6 @@ bool Empilhar(PILHA *P,No *novo){
 bool Desempilhar(PILHA *P,No *X){
 
     if(Vazia(P)){
-        //cout<<"Fila vazia, impossível retirar.\n";
         return false;
     }
     No *lixo;
@@ -64,9 +58,6 @@ bool Desempilhar(PILHA *P,No *X){
     X->f = P->topo->f;
     P->topo = P->topo->proximo;
     
-    /*if(P->topo != NULL)
-        cout<<"Valor do novo topo eh: {"<<P->topo->valor<<"}.\n";
-    */
     lixo = LiberaNo(lixo);
 
     return true;
@@ -83,7 +74,6 @@ int ComparaPilhas(PILHA *P1, PILHA *P2){
 
         if(igual(N1->f,N2->f)){
             
-            //cout<<"O valor de N1= "<<N1->valor<<" eh igual ao valor de N2= "<<N2->valor<<".\n";
             igualdades++;
         }
         N1 = N1->proximo;
@@ -98,12 +88,12 @@ void imprimePILHA(PILHA *P,BITMAP *buffer,int width,int height){
     No *aux;
     aux = P->topo;
 
-    int contador=0;
+    double contador=0;
 
     while(aux != NULL){
         
-        draw_sprite(buffer,aux->f->img,width/6+contador,height/2);
-        contador++;
+        draw_sprite(buffer,aux->f->img,1+(80*contador),height/3);
+        contador += 1;
         aux = aux->proximo;
     }
 
@@ -121,3 +111,69 @@ PILHA* LiberarPilha(PILHA *P){
 
     return P;
 }
+
+//Teste para verificar erros
+/*int sai=0;
+
+void sair(){sai=1;}
+int width =800;
+int height=600;
+
+void init()
+{
+  //Iniciação
+	allegro_init();
+	install_timer();
+	install_mouse();
+    install_keyboard();
+	set_color_depth(32);
+	set_window_title("Jogo da Pilha");
+	set_close_button_callback(sair);
+	install_sound(DIGI_AUTODETECT, MIDI_AUTODETECT, NULL);  
+	set_gfx_mode(GFX_AUTODETECT_WINDOWED, width, height, 0, 0);
+
+}
+
+
+
+int main(){
+
+    init();
+
+    fruta *f[10];
+    string v[10] = {"abacaxi","banana","maca","laranja","caju","framboesa","abacate","morango","uva","melancia"};
+
+
+   for(int j=0;j<10;j++){
+       f[j] = criaFruta(v[j]);
+   }
+
+    No *noh[10];
+
+    for(int i=0;i<10;i++){
+        noh[i] = criaNo(f[i]);
+    }
+
+    PILHA *P1 = CriarPilha(10);
+    BITMAP *buffer;
+    buffer = create_bitmap(width, height);
+
+    for(int w=0;w<10;w++)
+        if(Empilhar(P1,noh[w]))
+            cout<<"Empilhado com sucesso\n";
+
+    while (!(sai || key[KEY_ESC])){
+        imprimePILHA(P1,buffer,width,height);
+    //impressao(P1);
+    
+    //BUFFER
+		draw_sprite(screen, buffer, 0, 0);
+		
+		//RESTO
+		rest(10);
+		clear(buffer);
+
+    }
+
+}
+*/

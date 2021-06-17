@@ -1,8 +1,13 @@
-#ifndef JOGO_H
-#define JOGO_H
+#ifndef JOGOs_H
+#define JOGOs_H
 
 #include "Jogador.h"
 #include "Pilha.h"
+
+#include <vector>
+#include <algorithm>
+#include <random>
+#include <chrono>
 
 class Jogo
 {

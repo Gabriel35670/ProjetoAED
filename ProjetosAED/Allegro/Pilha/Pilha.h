@@ -1,5 +1,5 @@
-#ifndef PILHA_H
-#define PILHA_H
+#ifndef PILHAsJOGO_H
+#define PILHAsJOGO_H
 
 #include "No.h"
 
@@ -21,7 +21,7 @@ bool Vazia(PILHA *P);
 bool Cheia(PILHA *P);
 
 int ComparaPilhas(PILHA *P1, PILHA *P2);
-void imprimePILHA(PILHA *P);
+void imprimePILHA(PILHA *P, BITMAP *buffer,int width,int height);
 
 
 #endif

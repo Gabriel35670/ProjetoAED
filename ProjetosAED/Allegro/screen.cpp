@@ -1,8 +1,13 @@
 #include "screen.h"
 
 
+//screen.h
+
 enum{TITLESCREEN,SSCREEN,MSCREEN,MEMORYSCREEN,GAMESCREEN,FINALSCREEN,CONFIGSCREEN};
 
+
+
+//Feito
 void menu(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click,int height,int width,int *screen_state){
 
 	BITMAP *single,*single_highlight,*multi,*multi_highlight,*config,*config_highlight;
@@ -88,6 +93,8 @@ void menu(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click
 }
 END_OF_FUNCTION(menu)
 
+
+//Arrumar a fonte do nome do jogador
 void single_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click,int height,int width,int *screen_state,Jogador *j){
 
 	BITMAP *nome,*voltar,*voltar_highlight,*start,*start_highlight;
@@ -155,6 +162,8 @@ void single_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMP
 }
 END_OF_FUNCTION(single_screen)
 
+
+//Verificar como realizar
 void multi_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click,int height,int width,int *screen_state){
 
 	
@@ -189,6 +198,8 @@ void multi_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPL
 }
 END_OF_FUNCTION(multi_screen)
 
+
+//Ultima coisa
 void config_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click,int height,int width,int *screen_state){
 
 	
@@ -223,16 +234,18 @@ void config_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMP
 }
 END_OF_FUNCTION(config_screen)
 
+
+//Em andamento
 void memory_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click,int height,int width,int *screen_state){
 
 	
 	bool exit_screen = false;
-	/*Jogo game(30,1.30);
+	Jogo game(30,1.30);
 	PILHA *P1;
 
-	P1 = CriarPilha(5);
-	game.embaralha(P1);
-	*/
+	P1 = CriarPilha(10);
+	game.embaralha(P1,10);
+	
 	//int tamanho = P1->tamanhoMAX;
 	
 	inicia_timer();
@@ -255,7 +268,7 @@ void memory_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMP
        "%02d: %02d",(((getTimer()/1000)/60)%60) ,((getTimer()/1000)%60));
 
 		//BITMAPS
-		//imprimePILHA(P1,buffer,widhth,height);
+		imprimePILHA(P1,buffer,width,height);
 
 
 		//UPDATE
@@ -350,3 +363,308 @@ void final_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPL
 	}
 }
 END_OF_FUNCTION(final_screen)
+
+//Fruta.cpp
+string getFileName(string n){
+
+    //File names
+    string v[10] = {"Pilha/F/abacaxi.bmp","Pilha/F/banana.bmp","Pilha/F/maca.bmp","Pilha/F/laranja.bmp","Pilha/F/caju.bmp",
+    "Pilha/F/framboesa.bmp","Pilha/F/abacate.bmp","Pilha/F/morango.bmp","Pilha/F/uva.bmp","Pilha/F/melancia.bmp"};
+
+    string v2[10] = {"abacaxi","banana","maca","laranja","caju","framboesa","abacate","morango","uva","melancia"};
+
+    int pos=0;
+    bool achou=false;
+
+    while(pos < 10 && !achou){
+        if(n == v2[pos])
+            achou = true;
+        pos++;
+    }
+    pos -= 1;
+    return v[pos];
+}
+
+
+fruta* criaFruta(string n){
+
+    fruta *novaFruta = new fruta;
+
+    novaFruta->nome = n;
+    string file_name = getFileName(n);
+    novaFruta->img = load_bitmap(file_name.c_str(),NULL);
+
+    return novaFruta;
+}
+
+
+bool igual(fruta *f1,fruta *f2){
+
+    if(f1->nome == f2->nome)
+        return true;
+    return false;
+}
+
+vector<fruta *> vet_frutas(int x){
+
+    string v[10] = {"abacaxi","banana","maca","laranja","caju","framboesa","abacate","morango","uva","melancia"};
+    
+    vector<fruta *> frutas;
+
+    fruta* aux;
+
+    for(int i=0;i<x;i++){
+     
+        aux = criaFruta(v[i]);
+        
+     
+        frutas.push_back(aux);
+
+    }
+
+    return frutas;
+
+} 
+
+//No.cpp
+No* criaNo(fruta *fruta){
+
+    No *N;
+    N = new No;
+
+    N->proximo = NULL;
+    N->f = fruta;
+    
+    return N;
+}
+
+No* LiberaNo(No *X){
+
+    delete X;
+
+    return X;
+}
+
+//Pilha.cpp
+
+PILHA* CriarPilha(int tamanhoMAX){
+
+    PILHA *P = new PILHA;
+    P->tamanhoMAX = tamanhoMAX;
+    P->topo = NULL;
+    
+
+    return P;
+}
+bool Cheia(PILHA *P){
+
+    int contador=0;
+    No *aux = P->topo;
+    while(aux != NULL){
+        aux = aux->proximo;
+        contador++;
+    }
+    
+    return contador == P->tamanhoMAX;
+}
+
+bool Vazia(PILHA *P){
+
+    return P->topo == NULL;
+}
+
+bool Empilhar(PILHA *P,No *novo){
+
+    if(Cheia(P) || novo == NULL){
+        return false;
+    }
+    else{
+        if(Vazia(P)){
+            novo->proximo = NULL;
+            P->topo = novo;
+        }
+        else{
+            No *aux;
+            aux = P->topo;
+            P->topo = novo;
+            P->topo->proximo = aux;
+        }
+    }
+    return true;
+}
+
+bool Desempilhar(PILHA *P,No *X){
+
+    if(Vazia(P)){
+        return false;
+    }
+    No *lixo;
+    
+    lixo = P->topo;
+    X->f = P->topo->f;
+    P->topo = P->topo->proximo;
+    
+    lixo = LiberaNo(lixo);
+
+    return true;
+}
+
+int ComparaPilhas(PILHA *P1, PILHA *P2){
+
+    int igualdades=0;
+
+    No *N1 = P1->topo;
+    No *N2 = P2->topo;
+
+    while(N1 != NULL && N2 != NULL){
+
+        if(igual(N1->f,N2->f)){
+            
+            igualdades++;
+        }
+        N1 = N1->proximo;
+        N2 = N2->proximo;
+    }
+
+    return igualdades;
+}
+void imprimePILHA(PILHA *P,BITMAP *buffer,int width,int height){
+
+    No *aux;
+    aux = P->topo;
+
+    double contador=0;
+
+    while(aux != NULL){
+        
+        draw_sprite(buffer,aux->f->img,1+(80*contador),height/3);
+        contador += 1;
+        aux = aux->proximo;
+    }
+
+}
+
+PILHA* LiberarPilha(PILHA *P){
+
+    No *aux;
+    fruta *f;
+    f = criaFruta("MELAO");
+    aux = criaNo(f);
+    while(!Vazia(P)){
+        if(Desempilhar(P,aux))
+			;
+    }
+
+    return P;
+}
+
+//Jogador.cpp
+
+int Jogador::contador = 0;
+
+Jogador::Jogador(string nome)
+{
+
+    setNome(nome);
+    pontuacao =0;
+}
+
+Jogador::~Jogador() {}
+
+void Jogador::setNome(string n)
+{
+
+    if (n != "\0")
+        nome = n;
+    else
+    {
+        string v[4] = {"Jogador1", "Jogador2", "Jogador3", "Jogador4"};
+
+        nome = v[contador];
+    }
+
+    contador++;
+}
+
+void Jogador::aumentaPontuacao()
+{
+    pontuacao++;
+}
+
+int Jogador::getPontos() const
+{
+    return pontuacao;
+}
+
+string Jogador::getNome() const{
+    return nome;
+}
+
+void Jogador::controlaCont(int x){
+    this->contador -= x;
+}
+
+//Jogo.cpp
+
+Jogo::Jogo(int tempoSeq, int tempoGam)
+{
+
+    setTempoSeq(tempoSeq);
+    setTempoGam(tempoGam);
+}
+
+Jogo::~Jogo() {}
+
+void Jogo::setTempoSeq(int tempoSeq)
+{
+    if (tempoSeq <= 0)
+    {
+        cout << "Tempo inválido" << endl;
+    }
+    else
+    {
+        tempoSequencia = tempoSeq;
+    }
+}
+
+void Jogo::setTempoGam(int tempoGam)
+{
+    if (tempoGam <= 0)
+    {
+        cout << "Tempo inválido" << endl;
+    }
+    else
+    {
+        tempoGameplay = tempoGam;
+    }
+}
+
+int Jogo::getTempoGam() const
+{
+    return tempoGameplay;
+}
+
+int Jogo::getTempoSeq() const
+{
+    return tempoSequencia;
+}
+
+void Jogo::embaralha(PILHA *P,int tamanho)
+{
+    vector<fruta *> frutas;
+
+    frutas = vet_frutas(tamanho);
+    unsigned seed = chrono::system_clock::now().time_since_epoch().count(); //gera uma "seed" aleatoria
+
+    shuffle(frutas.begin(), frutas.end(), default_random_engine(seed));
+
+    int tam = frutas.size();
+    for (int i = 0; i < tam; i++)
+    {
+        No *N;
+        N = new No;
+        N->f = frutas[i];
+        Empilhar(P, N);
+    }
+}
+
