@@ -15,35 +15,6 @@ using namespace std;
 #include <random>
 #include <chrono>
 
-//Jogador.h
-#ifndef JOGADOR_H_INCLUDED
-#define JOGADOR_H_INCLUDED
-
-
-class Jogador
-{
-
-    private:
-        string nome;
-        int pontuacao;
-        static int contador;
-
-    public:
-        Jogador(string nome);
-        ~Jogador();
-
-        void setNome(string);
-        string getNome() const;
-
-        void aumentaPontuacao();
-        int getPontos() const;
-        void controlaCont(int x);
-
-
-};
-
-#endif
-
 //Fruta.h
 #ifndef FRUTA_H
 #define FRUTA_H
@@ -105,7 +76,7 @@ PILHA* CriarPilha(int tamanhoMAX);
 PILHA* LiberarPilha(PILHA *P);
 
 bool Empilhar(PILHA *P,No *X);
-bool Desempilhar(PILHA *P,No *X);
+bool Desempilhar(PILHA *P,No *X,bool acabou);
 
 bool Vazia(PILHA *P);
 bool Cheia(PILHA *P);
@@ -113,6 +84,39 @@ bool Cheia(PILHA *P);
 int ComparaPilhas(PILHA *P1, PILHA *P2);
 
 void imprimePILHA(PILHA *P, BITMAP *buffer,int width,int height);
+
+#endif
+
+//Jogador.h
+#ifndef JOGADOR_H_INCLUDED
+#define JOGADOR_H_INCLUDED
+
+
+class Jogador
+{
+
+    private:
+        string nome;
+        int pontuacao;
+        PILHA *P;
+        static int contador;
+
+    public:
+        Jogador(string nome);
+        ~Jogador();
+
+        void setNome(string);
+        string getNome() const;
+
+        void aumentaPontuacao();
+        int getPontos() const;
+        void controlaCont(int x);
+
+        bool JogadorEmpilha(No *n);
+        PILHA* getPilha();
+
+
+};
 
 #endif
 
@@ -155,8 +159,34 @@ void menu(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click
 void single_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click,int height,int width,int *screen_state,Jogador *j);
 void multi_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click,int height,int width,int *screen_state);
 void memory_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click,int height,int width,int *screen_state,PILHA *P);
-void game_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click,int height,int width,int *screen_state);
-void final_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click,int height,int width,int *screen_state);
+void game_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click,int height,int width,int *screen_state,Jogador *j1);
+void final_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click,int height,int width,int *screen_state,PILHA *P, Jogador *j1);
 void config_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click,int height,int width,int *screen_state);
+void verifica_botao(Button *b1,BITMAP *iFruta,BITMAP *highlight,SAMPLE *click,Jogador *j1,No *noh,int *cont,int height,int dF);
 
 #endif
+
+/*
+if(b_maca->ativado){
+			bool entrou = false;
+			b_maca->ativado = false;
+			if(b_maca->pos_y == height/1.2 && Empilhar(j1->getPilha(),noh[2])){
+				destroy_button(b_maca);
+				b_maca = create_button(maca,voltar_highlight,click,1+(80*contadorPilha),height/2);
+				contadorPilha++;
+				entrou = true;
+			}
+			else{
+				if(Desempilhar(j1->getPilha(),noh[2],false)){
+				destroy_button(b_maca);
+				b_maca = create_button(maca,voltar_highlight,click,160,height/1.2);
+				contadorPilha--;
+				entrou = true;	
+				}
+			}
+			if(entrou){
+				button_input(b_maca);
+			}
+
+		}
+*/

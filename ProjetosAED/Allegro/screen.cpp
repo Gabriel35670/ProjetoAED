@@ -303,11 +303,33 @@ void memory_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMP
 }
 END_OF_FUNCTION(memory_screen)
 
-void game_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click,int height,int width,int *screen_state){
+void game_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click,int height,int width,int *screen_state,Jogador *j1){
+
+	//Cria frutas
+	string v[10] = {"abacaxi","banana","maca","laranja","caju","framboesa","abacate","morango","uva","melancia"};
+	No *noh[10];
+	fruta *f[10];
+	for(int i=0;i<10;i++){
+
+		f[i] = criaFruta(v[i]);
+		noh[i] = criaNo(f[i]);
+	}
 
 	
 	bool exit_screen = false;
+
+	//BITMAPS FRUTAS(NO TOTAL SAO 10)
 	BITMAP *abacaxi = load_bitmap("Pilha/F/abacaxi.bmp",NULL);
+	BITMAP *banana = load_bitmap("Pilha/F/banana.bmp",NULL);
+	BITMAP *maca = load_bitmap("Pilha/F/maca.bmp",NULL);
+	BITMAP *laranja = load_bitmap("Pilha/F/laranja.bmp",NULL);
+	BITMAP *caju = load_bitmap("Pilha/F/caju.bmp",NULL);
+	BITMAP *framboesa = load_bitmap("Pilha/F/framboesa.bmp",NULL);
+	BITMAP *abacate = load_bitmap("Pilha/F/abacate.bmp",NULL);
+	BITMAP *morango = load_bitmap("Pilha/F/morango.bmp",NULL);
+	BITMAP *uva = load_bitmap("Pilha/F/uva.bmp",NULL);
+	BITMAP *melancia = load_bitmap("Pilha/F/melancia.bmp",NULL);
+
 
 	//BITMAPS(highlights)
 	BITMAP  *voltar_highlight = load_bitmap("BITMAPS/Single/voltar_highlight.bmp", NULL);
@@ -315,13 +337,33 @@ void game_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE
 
 	//BUTTONS
 	Button *b_abacaxi = create_button(abacaxi,voltar_highlight,click,1,height/1.2);	
+	Button *b_banana = create_button(banana,voltar_highlight,click,80,height/1.2);	
+	Button *b_maca = create_button(maca,voltar_highlight,click,160,height/1.2);	
+	Button *b_laranja = create_button(laranja,voltar_highlight,click,240,height/1.2);	
+	Button *b_caju = create_button(caju,voltar_highlight,click,320,height/1.2);	
+	Button *b_framboesa = create_button(framboesa,voltar_highlight,click,400,height/1.2);	
+	Button *b_abacate = create_button(abacate,voltar_highlight,click,480,height/1.2);	
+	Button *b_morango = create_button(morango,voltar_highlight,click,560,height/1.2);	
+	Button *b_uva = create_button(uva,voltar_highlight,click,640,height/1.2);	
+	Button *b_melancia = create_button(melancia,voltar_highlight,click,720,height/1.2);	
+
 	inicia_timer();
+	int contadorPilha =0;
 
 	while (!(key[KEY_ESC] || exit_screen))
 	{		
 
 		//Botoes iniciados
 		button_input(b_abacaxi);
+		button_input(b_banana);
+		button_input(b_maca);
+		button_input(b_laranja);
+		button_input(b_caju);
+		button_input(b_framboesa);
+		button_input(b_abacate);
+		button_input(b_morango);
+		button_input(b_uva);
+		button_input(b_melancia);
 	
 		//Tela de fundo
 		draw_sprite(buffer,logo,0, 0);
@@ -339,15 +381,52 @@ void game_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE
 			*screen_state = FINALSCREEN;
 			trava_timer();;
 		}
-		if(b_abacaxi->ativado){
-			b_abacaxi->ativado = false;
-			destroy_button(b_abacaxi);
-			b_abacaxi = create_button(abacaxi,voltar_highlight,click,width/2,height/2);
-			button_input(b_abacaxi);
 
-		}
+		//UPDATE DAS FRUTAS
+
+		//ABACAXI
+		verifica_botao(b_abacaxi,abacaxi,voltar_highlight,click,&(*j1),noh[0],&contadorPilha,height,1);
+
+		//BANANA
+		verifica_botao(b_banana,banana,voltar_highlight,click,&(*j1),noh[1],&contadorPilha,height,80);
+
+		//MACA
+		verifica_botao(b_maca,maca,voltar_highlight,click,&(*j1),noh[2],&contadorPilha,height,160);
+
+
+		//LARANJA
+		verifica_botao(b_laranja,laranja,voltar_highlight,click,&(*j1),noh[3],&contadorPilha,height,240);
+
+		//CAJU
+		verifica_botao(b_caju,caju,voltar_highlight,click,&(*j1),noh[4],&contadorPilha,height,320);
+
+		//FRAMBOESA
+		verifica_botao(b_framboesa,framboesa,voltar_highlight,click,&(*j1),noh[5],&contadorPilha,height,400);
+
+		//ABACATE
+		verifica_botao(b_abacate,abacate,voltar_highlight,click,&(*j1),noh[6],&contadorPilha,height,480);
+
+		//MORANGO
+		verifica_botao(b_morango,morango,voltar_highlight,click,&(*j1),noh[7],&contadorPilha,height,560);
+
+		//UVA
+		verifica_botao(b_uva,uva,voltar_highlight,click,&(*j1),noh[8],&contadorPilha,height,640);
+
+		//MELANCIA
+		verifica_botao(b_melancia,melancia,voltar_highlight,click,&(*j1),noh[9],&contadorPilha,height,720);
+
 		//BUTTONS
 		button_draw(b_abacaxi, buffer);
+		button_draw(b_banana, buffer);
+		button_draw(b_maca, buffer);
+		button_draw(b_laranja, buffer);
+		button_draw(b_caju, buffer);
+		button_draw(b_framboesa, buffer);
+		button_draw(b_abacate, buffer);
+		button_draw(b_morango, buffer);
+		button_draw(b_uva, buffer);
+		button_draw(b_melancia, buffer);
+
 
 		//MOUSE
 		draw_sprite(buffer,cursor,mouse_x-6,mouse_y-6);
@@ -362,7 +441,7 @@ void game_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE
 }
 END_OF_FUNCTION(game_screen)
 
-void final_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click,int height,int width,int *screen_state){
+void final_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click,int height,int width,int *screen_state,PILHA *P,Jogador *j1){
 
 	
 	bool exit_screen = false;
@@ -378,6 +457,8 @@ void final_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPL
 
 		//Titulo do jogo
 		textprintf_centre_ex(buffer, verdana, width/2, height/12, 0x0, -1,"Tela final");
+		//imprimePILHA(P,buffer,width,height);
+		imprimePILHA(j1->getPilha(),buffer,width,height);
 		
 		//UPDATE
 
@@ -395,6 +476,34 @@ void final_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPL
 	}
 }
 END_OF_FUNCTION(final_screen)
+
+void verifica_botao(Button *b1,BITMAP *iFruta,BITMAP *highlight,SAMPLE *click,Jogador *j1,No *noh,int *cont,int height,int dF){
+
+	if(b1->ativado){
+
+			bool entrou = false;
+			b1->ativado = false;
+			if(b1->pos_y == height/1.2 && Empilhar(j1->getPilha(),noh)){
+				destroy_button(b1);
+				b1 = create_button(iFruta,highlight,click,720-((*cont)*(80)),height/2);
+				*cont += 1;
+				entrou = true;
+			
+			}
+			else{
+				if(Desempilhar(j1->getPilha(),noh,false)){
+				destroy_button(b1);
+				b1 = create_button(iFruta,highlight,click,dF,height/1.2);
+				*cont -= 1;
+				entrou = true;	
+				}
+			}
+			if(entrou){
+				button_input(b1);
+			}
+
+		}
+}
 
 //Fruta.cpp
 string getFileName(string n){
@@ -525,20 +634,31 @@ bool Empilhar(PILHA *P,No *novo){
     return true;
 }
 
-bool Desempilhar(PILHA *P,No *X){
+bool Desempilhar(PILHA *P,No *X,bool acabou){
 
     if(Vazia(P)){
         return false;
     }
-    No *lixo;
-    
-    lixo = P->topo;
+	if(acabou && P->topo == X){
+		No *lixo;
+
+		X->f = P->topo->f;
+    	P->topo = P->topo->proximo;
+
+		lixo = P->topo;
+		lixo = LiberaNo(lixo);
+
+		return true;
+	}
+	else{
+	if(P->topo == X){
     X->f = P->topo->f;
     P->topo = P->topo->proximo;
+	return true;
+		}
+	}
     
-    lixo = LiberaNo(lixo);
-
-    return true;
+    return false;
 }
 
 int ComparaPilhas(PILHA *P1, PILHA *P2){
@@ -582,7 +702,7 @@ PILHA* LiberarPilha(PILHA *P){
     f = criaFruta("MELAO");
     aux = criaNo(f);
     while(!Vazia(P)){
-        if(Desempilhar(P,aux))
+        if(Desempilhar(P,aux,true))
 			;
     }
 
@@ -597,6 +717,7 @@ Jogador::Jogador(string nome)
 {
 
     setNome(nome);
+	this->P = CriarPilha(10);
     pontuacao =0;
 }
 
@@ -635,6 +756,16 @@ void Jogador::controlaCont(int x){
     this->contador -= x;
 }
 
+bool Jogador::JogadorEmpilha(No *n){
+
+	if(Empilhar(this->P,n))
+		return true;
+	return false;
+}
+
+PILHA* Jogador::getPilha(){
+	return this->P;
+}
 //Jogo.cpp
 
 Jogo::Jogo(int tempoSeq, int tempoGam)

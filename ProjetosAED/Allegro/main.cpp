@@ -63,6 +63,7 @@ int main() {
 
 	//int single =0;
 	PILHA *P_principal;
+	Jogador *j1;
 
 	while (!(sai || key[KEY_ESC]))
 	{		
@@ -70,8 +71,8 @@ int main() {
 				menu(buffer,logo,cursor,verdana,click,height,width,&screen_state);	
 		else if(screen_state == SSCREEN){
 		
-			Jogador *j1 = new Jogador("");
 			//single = 1;
+			j1 = new Jogador("");
 			single_screen(buffer,logo,cursor,verdana,click,height,width,&screen_state,j1);
 			P_principal = CriarPilha(10);
 
@@ -87,10 +88,10 @@ int main() {
 			memory_screen(buffer,logo,cursor,verdana,click,height,width,&screen_state,P_principal);
 
 		else if(screen_state == GAMESCREEN)
-			game_screen(buffer,logo,cursor,verdana,click,height,width,&screen_state);
+			game_screen(buffer,logo,cursor,verdana,click,height,width,&screen_state,j1);
 
 		else if(screen_state == FINALSCREEN)
-			final_screen(buffer,logo,cursor,verdana,click,height,width,&screen_state);
+			final_screen(buffer,logo,cursor,verdana,click,height,width,&screen_state,P_principal,j1);
 	
 	}
 
