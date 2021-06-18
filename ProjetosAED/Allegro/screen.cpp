@@ -159,6 +159,15 @@ void single_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMP
 		rest(10);
 		clear(buffer);	
 	}
+	destroy_bitmap(voltar_highlight);
+	destroy_bitmap(voltar);
+	destroy_bitmap(nome);
+	destroy_bitmap(start);
+	destroy_bitmap(start_highlight);
+
+	destroy_button(b_start);
+	destroy_button(b_voltar);
+	
 }
 END_OF_FUNCTION(single_screen)
 
@@ -236,15 +245,14 @@ END_OF_FUNCTION(config_screen)
 
 
 //Em andamento
-void memory_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click,int height,int width,int *screen_state){
+void memory_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE *click,int height,int width,int *screen_state,PILHA *P){
 
 	
 	bool exit_screen = false;
 	Jogo game(30,1.30);
-	PILHA *P1;
 
-	P1 = CriarPilha(10);
-	game.embaralha(P1,10);
+	//P = CriarPilha(10);
+	game.embaralha(P,10);
 	
 	//int tamanho = P1->tamanhoMAX;
 	
@@ -268,11 +276,11 @@ void memory_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMP
        "%02d: %02d",(((getTimer()/1000)/60)%60) ,((getTimer()/1000)%60));
 
 		//BITMAPS
-		imprimePILHA(P1,buffer,width,height);
+		imprimePILHA(P,buffer,width,height);
 
 
 		//UPDATE
-		if(((getTimer()/1000)%60) == 30){
+		if(((getTimer()/1000)%60) == 5){
 			exit_screen = true;
 			*screen_state = GAMESCREEN;
 			trava_timer();
@@ -299,23 +307,47 @@ void game_screen(BITMAP *buffer,BITMAP *logo,BITMAP *cursor,FONT *verdana,SAMPLE
 
 	
 	bool exit_screen = false;
-	
+	BITMAP *abacaxi = load_bitmap("Pilha/F/abacaxi.bmp",NULL);
+
+	//BITMAPS(highlights)
+	BITMAP  *voltar_highlight = load_bitmap("BITMAPS/Single/voltar_highlight.bmp", NULL);
+
+
+	//BUTTONS
+	Button *b_abacaxi = create_button(abacaxi,voltar_highlight,click,1,height/1.2);	
+	inicia_timer();
 
 	while (!(key[KEY_ESC] || exit_screen))
 	{		
 
 		//Botoes iniciados
-		
+		button_input(b_abacaxi);
 	
 		//Tela de fundo
 		draw_sprite(buffer,logo,0, 0);
 
 		//Titulo do jogo
-		textprintf_centre_ex(buffer, verdana, width/2, height/12, 0x0, -1,"GAME SCREEN");
+		textprintf_centre_ex(buffer, verdana, width/2, height/12, 0x0, -1,"Replique a pilha!");
+
+		//TIMER
+		textprintf_centre_ex(buffer, verdana, SCREEN_W/2, SCREEN_H/9, makecol(0,0,0), -1,
+       "%02d: %02d",(((getTimer()/1000)/60)%60) ,((getTimer()/1000)%60));
 		
 		//UPDATE
+		if((((getTimer()/1000)%60) == 30) && ((((getTimer()/1000)/60)%60)) == 1){
+			exit_screen = true;
+			*screen_state = FINALSCREEN;
+			trava_timer();;
+		}
+		if(b_abacaxi->ativado){
+			b_abacaxi->ativado = false;
+			destroy_button(b_abacaxi);
+			b_abacaxi = create_button(abacaxi,voltar_highlight,click,width/2,height/2);
+			button_input(b_abacaxi);
 
+		}
 		//BUTTONS
+		button_draw(b_abacaxi, buffer);
 
 		//MOUSE
 		draw_sprite(buffer,cursor,mouse_x-6,mouse_y-6);
@@ -543,7 +575,6 @@ void imprimePILHA(PILHA *P,BITMAP *buffer,int width,int height){
     }
 
 }
-
 PILHA* LiberarPilha(PILHA *P){
 
     No *aux;

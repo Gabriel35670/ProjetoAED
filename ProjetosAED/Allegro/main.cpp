@@ -62,6 +62,7 @@ int main() {
 	click = load_sample("SAMPLES/click.wav");
 
 	//int single =0;
+	PILHA *P_principal;
 
 	while (!(sai || key[KEY_ESC]))
 	{		
@@ -72,6 +73,7 @@ int main() {
 			Jogador *j1 = new Jogador("");
 			//single = 1;
 			single_screen(buffer,logo,cursor,verdana,click,height,width,&screen_state,j1);
+			P_principal = CriarPilha(10);
 
 		}
 
@@ -82,7 +84,7 @@ int main() {
 			config_screen(buffer,logo,cursor,verdana,click,height,width,&screen_state);
 
 		else if(screen_state == MEMORYSCREEN)
-			memory_screen(buffer,logo,cursor,verdana,click,height,width,&screen_state);
+			memory_screen(buffer,logo,cursor,verdana,click,height,width,&screen_state,P_principal);
 
 		else if(screen_state == GAMESCREEN)
 			game_screen(buffer,logo,cursor,verdana,click,height,width,&screen_state);
