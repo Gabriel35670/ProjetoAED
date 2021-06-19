@@ -83,7 +83,7 @@ bool Cheia(PILHA *P);
 
 int ComparaPilhas(PILHA *P1, PILHA *P2);
 
-void imprimePILHA(PILHA *P, BITMAP *buffer,int width,int height);
+void imprimePILHA(PILHA *P, BITMAP *buffer,int width,int height,int jeito=0);
 
 #endif
 
@@ -114,6 +114,7 @@ class Jogador
 
         bool JogadorEmpilha(No *n);
         PILHA* getPilha();
+        void LPilha();
 
 
 };

@@ -22,7 +22,7 @@ FONT *verdana;
 SAMPLE* click;
 
 //Estados da tela
-enum{TITLESCREEN,SSCREEN,MSCREEN,MEMORYSCREEN,GAMESCREEN,FINALSCREEN,CONFIGSCREEN};
+enum{TITLESCREEN,SSCREEN,MSCREEN,MEMORYSCREEN,GAMESCREEN,FINALSCREEN,CONFIGSCREEN,OUT};
 int screen_state;
 
 
@@ -64,6 +64,7 @@ int main() {
 	//int single =0;
 	PILHA *P_principal;
 	Jogador *j1;
+	bool jafoi=false;
 
 	while (!(sai || key[KEY_ESC]))
 	{		
@@ -71,11 +72,13 @@ int main() {
 				menu(buffer,logo,cursor,verdana,click,height,width,&screen_state);	
 		else if(screen_state == SSCREEN){
 		
-			//single = 1;
-			j1 = new Jogador("");
+			if(!jafoi){
+				j1 = new Jogador("");
+				jafoi = true;
+			}
+
 			single_screen(buffer,logo,cursor,verdana,click,height,width,&screen_state,j1);
 			P_principal = CriarPilha(10);
-
 		}
 
 		else if(screen_state == MSCREEN)
@@ -92,6 +95,8 @@ int main() {
 
 		else if(screen_state == FINALSCREEN)
 			final_screen(buffer,logo,cursor,verdana,click,height,width,&screen_state,P_principal,j1);
+		else if(screen_state == OUT)
+			key[KEY_ESC] = true;
 	
 	}
 
@@ -103,6 +108,9 @@ int main() {
 
 	destroy_font(verdana);
 	
+	P_principal = LiberarPilha(P_principal);
+	j1->LPilha();
+
 	return 0;
 }
 END_OF_MAIN()

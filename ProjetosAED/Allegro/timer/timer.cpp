@@ -7,7 +7,7 @@ void incremeta_timer(){
 }
 
 void inicia_timer(){
-
+    timer=0;
     LOCK_FUNCTION(incrementa_timer);
 	LOCK_VARIABLE(timer);
 	install_int_ex(incremeta_timer, MSEC_TO_TIMER(1));
