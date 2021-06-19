@@ -586,7 +586,7 @@ void verifica_botao(Button *b1,BITMAP *iFruta,BITMAP *highlight,SAMPLE *click,Jo
 
 			bool entrou = false;
 			b1->ativado = false;
-			if(b1->pos_y == height/1.2 && Empilhar(j1->getPilha(),noh)){
+			if(b1->pos_y == (600/1.2) && Empilhar(j1->getPilha(),noh)){
 				destroy_button(b1);
 				b1 = create_button(iFruta,highlight,click,720-((*cont)*(80)),height/2);
 				*cont += 1;
