@@ -1,5 +1,5 @@
-#ifndef BUTTON_H_INCLUDED
-#define BUTTON_H_INCLUDED
+#ifndef BUTTON_H_I
+#define BUTTON_H_I
 
 #include <allegro.h>
 #include <stdlib.h>
@@ -22,7 +22,6 @@ typedef struct button
 
 Button* create_button(BITMAP* image, BITMAP* h_image, SAMPLE* h_effect, int x, int y);
 void button_input(Button* b);
-void button_update(Button* b);
 void button_draw(Button* b, BITMAP* buffer);
 void destroy_button(Button* b);
 

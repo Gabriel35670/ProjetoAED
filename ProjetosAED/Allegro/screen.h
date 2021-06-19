@@ -95,7 +95,7 @@ private:
     static int contador;
 
 public:
-    Jogador(string nome);
+    Jogador(string nome,int t);
     ~Jogador();
 
     void setNome(string);
@@ -155,28 +155,3 @@ void config_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, 
 void verifica_botao(Button *b1, BITMAP *iFruta, BITMAP *highlight, SAMPLE *click, Jogador *j1, No *noh, int *cont, int height, int dF);
 
 #endif
-
-/*
-if(b_maca->ativado){
-			bool entrou = false;
-			b_maca->ativado = false;
-			if(b_maca->pos_y == height/1.2 && Empilhar(j1->getPilha(),noh[2])){
-				destroy_button(b_maca);
-				b_maca = create_button(maca,voltar_highlight,click,1+(80*contadorPilha),height/2);
-				contadorPilha++;
-				entrou = true;
-			}
-			else{
-				if(Desempilhar(j1->getPilha(),noh[2],false)){
-				destroy_button(b_maca);
-				b_maca = create_button(maca,voltar_highlight,click,160,height/1.2);
-				contadorPilha--;
-				entrou = true;	
-				}
-			}
-			if(entrou){
-				button_input(b_maca);
-			}
-
-		}
-*/

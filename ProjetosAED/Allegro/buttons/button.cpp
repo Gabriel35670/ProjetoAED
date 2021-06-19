@@ -46,15 +46,6 @@ void button_input(Button* b)
   }
 }
 
-void button_update(Button* b)
-{
-  if(b->ativado)
-  {
-
-  }
-}
-
-
 void button_draw(Button* b, BITMAP* buffer)
 {
     draw_sprite(buffer,  b->img, b->pos_x,  b->pos_y);
