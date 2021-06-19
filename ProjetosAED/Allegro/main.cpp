@@ -28,7 +28,8 @@ enum
 	MEMORYSCREEN,
 	GAMESCREEN,
 	FINALSCREEN,
-	CONFIGSCREEN
+	CONFIGSCREEN,
+	OUT
 };
 int screen_state;
 
@@ -68,8 +69,8 @@ int main()
 	//int single =0;
 	PILHA *P_principal;
 	Jogador *j1;
+	bool jafoi = false;
 	Jogo *game;
-
 	while (!(sai || key[KEY_ESC]))
 	{
 		game = new Jogo(30, 1.30, 10);
@@ -78,8 +79,12 @@ int main()
 		else if (screen_state == SSCREEN)
 		{
 
-			//single = 1;
-			j1 = new Jogador("");
+			if (!jafoi)
+			{
+				j1 = new Jogador("");
+				jafoi = true;
+			}
+
 			single_screen(buffer, logo, cursor, verdana, click, height, width, &screen_state, j1, game);
 			P_principal = CriarPilha(10);
 		}
@@ -98,6 +103,8 @@ int main()
 
 		else if (screen_state == FINALSCREEN)
 			final_screen(buffer, logo, cursor, verdana, click, height, width, &screen_state, P_principal, j1, game);
+		else if (screen_state == OUT)
+			key[KEY_ESC] = true;
 	}
 
 	destroy_bitmap(buffer);
@@ -107,6 +114,9 @@ int main()
 	destroy_sample(click);
 
 	destroy_font(verdana);
+
+	P_principal = LiberarPilha(P_principal);
+	j1->LPilha();
 
 	return 0;
 }

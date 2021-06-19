@@ -77,7 +77,7 @@ bool Cheia(PILHA *P);
 
 int ComparaPilhas(PILHA *P1, PILHA *P2);
 
-void imprimePILHA(PILHA *P, BITMAP *buffer, int width, int height);
+void imprimePILHA(PILHA *P, BITMAP *buffer, int width, int height, int jeito = 0);
 
 #endif
 
@@ -100,13 +100,13 @@ public:
 
     void setNome(string);
     string getNome() const;
+    bool JogadorEmpilha(No *n);
+    PILHA *getPilha();
+    void LPilha();
 
     void aumentaPontuacao();
     int getPontos() const;
     void controlaCont(int x);
-
-    bool JogadorEmpilha(No *n);
-    PILHA *getPilha();
 };
 
 #endif

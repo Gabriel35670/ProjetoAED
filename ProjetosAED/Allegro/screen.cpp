@@ -10,7 +10,8 @@ enum
 	MEMORYSCREEN,
 	GAMESCREEN,
 	FINALSCREEN,
-	CONFIGSCREEN
+	CONFIGSCREEN,
+	OUT
 };
 
 //Feito
@@ -227,6 +228,13 @@ void config_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, 
 	BITMAP *setaDireita, *setaEsquerda, *highlight, *voltar, *highlightDireita, *highlightEsquerda;
 	Button *bSetaDireita, *bSetaEsquerda, *b_voltar;
 
+	/*
+	NUMERO DE JOGADORES(1-4),1 default
+	TAMANHO DA PILHA(5,7,10), DEFAULT É 10
+	TEMPO: FACIL(2:00),MEDIO(1:00),DIFICIL(00:30) DEFAULT É FACIL;
+
+	*/
+
 	bool exit_screen = false;
 
 	//BITMAPS
@@ -343,7 +351,6 @@ void memory_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, 
 		rest(10);
 		clear(buffer);
 	}
-	//P1 = LiberarPilha(P1);
 }
 END_OF_FUNCTION(memory_screen)
 
@@ -377,18 +384,26 @@ void game_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, SA
 
 	//BITMAPS(highlights)
 	BITMAP *voltar_highlight = load_bitmap("BITMAPS/Single/voltar_highlight.bmp", NULL);
+	BITMAP *fruta_highlight = load_bitmap("Pilha/F/fruta_highlight.bmp", NULL);
 
 	//BUTTONS
-	Button *b_abacaxi = create_button(abacaxi, voltar_highlight, click, 1, height / 1.2);
-	Button *b_banana = create_button(banana, voltar_highlight, click, 80, height / 1.2);
-	Button *b_maca = create_button(maca, voltar_highlight, click, 160, height / 1.2);
-	Button *b_laranja = create_button(laranja, voltar_highlight, click, 240, height / 1.2);
-	Button *b_caju = create_button(caju, voltar_highlight, click, 320, height / 1.2);
-	Button *b_framboesa = create_button(framboesa, voltar_highlight, click, 400, height / 1.2);
-	Button *b_abacate = create_button(abacate, voltar_highlight, click, 480, height / 1.2);
-	Button *b_morango = create_button(morango, voltar_highlight, click, 560, height / 1.2);
-	Button *b_uva = create_button(uva, voltar_highlight, click, 640, height / 1.2);
-	Button *b_melancia = create_button(melancia, voltar_highlight, click, 720, height / 1.2);
+	Button *b_abacaxi = create_button(abacaxi, fruta_highlight, click, 1, height / 1.2);
+	Button *b_banana = create_button(banana, fruta_highlight, click, 80, height / 1.2);
+	Button *b_maca = create_button(maca, fruta_highlight, click, 160, height / 1.2);
+	Button *b_laranja = create_button(laranja, fruta_highlight, click, 240, height / 1.2);
+	Button *b_caju = create_button(caju, fruta_highlight, click, 320, height / 1.2);
+	Button *b_framboesa = create_button(framboesa, fruta_highlight, click, 400, height / 1.2);
+	Button *b_abacate = create_button(abacate, fruta_highlight, click, 480, height / 1.2);
+	Button *b_morango = create_button(morango, fruta_highlight, click, 560, height / 1.2);
+	Button *b_uva = create_button(uva, fruta_highlight, click, 640, height / 1.2);
+	Button *b_melancia = create_button(melancia, fruta_highlight, click, 720, height / 1.2);
+
+	//OUTRO BITMAP
+	BITMAP *finalizar = load_bitmap("BITMAPS/Game/finalizar.bmp", NULL);
+	BITMAP *finalizar_highlight = load_bitmap("BITMAPS/Game/finalizar_highlight.bmp", NULL);
+
+	//Buttons
+	Button *b_finalizar = create_button(finalizar, finalizar_highlight, click, width - 200, height / 9);
 
 	inicia_timer();
 	int contadorPilha = 0;
@@ -408,6 +423,8 @@ void game_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, SA
 		button_input(b_uva);
 		button_input(b_melancia);
 
+		button_input(b_finalizar);
+
 		//Tela de fundo
 		draw_sprite(buffer, logo, 0, 0);
 
@@ -419,7 +436,7 @@ void game_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, SA
 							 "%02d: %02d", (((getTimer() / 1000) / 60) % 60), ((getTimer() / 1000) % 60));
 
 		//UPDATE
-		if ((((getTimer() / 1000) % 60) == 30) && ((((getTimer() / 1000) / 60) % 60)) == 1)
+		if (((((getTimer() / 1000) % 60) == 15) && ((((getTimer() / 1000) / 60) % 60)) == 0) || b_finalizar->ativado)
 		{
 			exit_screen = true;
 			*screen_state = FINALSCREEN;
@@ -430,34 +447,34 @@ void game_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, SA
 		//UPDATE DAS FRUTAS
 
 		//ABACAXI
-		verifica_botao(b_abacaxi, abacaxi, voltar_highlight, click, &(*j1), noh[0], &contadorPilha, height, 1);
+		verifica_botao(b_abacaxi, abacaxi, fruta_highlight, click, &(*j1), noh[0], &contadorPilha, height, 1);
 
 		//BANANA
-		verifica_botao(b_banana, banana, voltar_highlight, click, &(*j1), noh[1], &contadorPilha, height, 80);
+		verifica_botao(b_banana, banana, fruta_highlight, click, &(*j1), noh[1], &contadorPilha, height, 80);
 
 		//MACA
-		verifica_botao(b_maca, maca, voltar_highlight, click, &(*j1), noh[2], &contadorPilha, height, 160);
+		verifica_botao(b_maca, maca, fruta_highlight, click, &(*j1), noh[2], &contadorPilha, height, 160);
 
 		//LARANJA
-		verifica_botao(b_laranja, laranja, voltar_highlight, click, &(*j1), noh[3], &contadorPilha, height, 240);
+		verifica_botao(b_laranja, laranja, fruta_highlight, click, &(*j1), noh[3], &contadorPilha, height, 240);
 
 		//CAJU
-		verifica_botao(b_caju, caju, voltar_highlight, click, &(*j1), noh[4], &contadorPilha, height, 320);
+		verifica_botao(b_caju, caju, fruta_highlight, click, &(*j1), noh[4], &contadorPilha, height, 320);
 
 		//FRAMBOESA
-		verifica_botao(b_framboesa, framboesa, voltar_highlight, click, &(*j1), noh[5], &contadorPilha, height, 400);
+		verifica_botao(b_framboesa, framboesa, fruta_highlight, click, &(*j1), noh[5], &contadorPilha, height, 400);
 
 		//ABACATE
-		verifica_botao(b_abacate, abacate, voltar_highlight, click, &(*j1), noh[6], &contadorPilha, height, 480);
+		verifica_botao(b_abacate, abacate, fruta_highlight, click, &(*j1), noh[6], &contadorPilha, height, 480);
 
 		//MORANGO
-		verifica_botao(b_morango, morango, voltar_highlight, click, &(*j1), noh[7], &contadorPilha, height, 560);
+		verifica_botao(b_morango, morango, fruta_highlight, click, &(*j1), noh[7], &contadorPilha, height, 560);
 
 		//UVA
-		verifica_botao(b_uva, uva, voltar_highlight, click, &(*j1), noh[8], &contadorPilha, height, 640);
+		verifica_botao(b_uva, uva, fruta_highlight, click, &(*j1), noh[8], &contadorPilha, height, 640);
 
 		//MELANCIA
-		verifica_botao(b_melancia, melancia, voltar_highlight, click, &(*j1), noh[9], &contadorPilha, height, 720);
+		verifica_botao(b_melancia, melancia, fruta_highlight, click, &(*j1), noh[9], &contadorPilha, height, 720);
 
 		//BUTTONS
 		button_draw(b_abacaxi, buffer);
@@ -470,6 +487,7 @@ void game_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, SA
 		button_draw(b_morango, buffer);
 		button_draw(b_uva, buffer);
 		button_draw(b_melancia, buffer);
+		button_draw(b_finalizar, buffer);
 
 		//MOUSE
 		draw_sprite(buffer, cursor, mouse_x - 6, mouse_y - 6);
@@ -481,30 +499,83 @@ void game_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, SA
 		rest(10);
 		clear(buffer);
 	}
+
+	//BITMAPS
+	destroy_bitmap(fruta_highlight);
+	destroy_bitmap(abacaxi);
+	destroy_bitmap(banana);
+	destroy_bitmap(maca);
+	destroy_bitmap(laranja);
+	destroy_bitmap(caju);
+	destroy_bitmap(framboesa);
+	destroy_bitmap(abacate);
+	destroy_bitmap(morango);
+	destroy_bitmap(uva);
+	destroy_bitmap(melancia);
+
+	destroy_bitmap(finalizar_highlight);
+	destroy_bitmap(finalizar);
+
+	//BUTTONS
+	destroy_button(b_abacaxi);
+	destroy_button(b_banana);
+	destroy_button(b_maca);
+	destroy_button(b_laranja);
+	destroy_button(b_caju);
+	destroy_button(b_framboesa);
+	destroy_button(b_abacate);
+	destroy_button(b_morango);
+	destroy_button(b_uva);
+	destroy_button(b_melancia);
+
+	destroy_button(b_finalizar);
 }
 END_OF_FUNCTION(game_screen)
 
 void final_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, SAMPLE *click, int height, int width, int *screen_state, PILHA *P, Jogador *j1, Jogo *game)
 {
 
+	//BITMAPS
+	BITMAP *sair = load_bitmap("BITMAPS/Final/sair.bmp", NULL);
+
+	//BITMAPS(highlights)
+	BITMAP *sair_highlight = load_bitmap("BITMAPS/Final/sair_highlight.bmp", NULL);
+
+	//BUTTONS
+	Button *b_sair = create_button(sair, sair_highlight, click, width / 2.5, height / 8);
+
 	bool exit_screen = false;
+
+	//Comparar pilhas
+	int resultado = ComparaPilhas(P, j1->getPilha());
 
 	while (!(key[KEY_ESC] || exit_screen))
 	{
 
 		//Botoes iniciados
+		button_input(b_sair);
 
 		//Tela de fundo
 		draw_sprite(buffer, logo, 0, 0);
 
 		//Titulo do jogo
 		textprintf_centre_ex(buffer, verdana, width / 2, height / 12, 0x0, -1, "Tela final");
-		//imprimePILHA(P,buffer,width,height);
-		imprimePILHA(j1->getPilha(), buffer, width, height);
+		textprintf_centre_ex(buffer, verdana, width / 2, height / 10, 0x0, -1, "Voce acertou %d de 10", resultado);
+
+		imprimePILHA(P, buffer, width, height);
+		imprimePILHA(j1->getPilha(), buffer, width, height, 1);
 
 		//UPDATE
+		if (b_sair->ativado)
+		{
+			*screen_state = OUT;
+			exit_screen = true;
+			P = LiberarPilha(P);
+			j1->LPilha();
+		}
 
 		//BUTTONS
+		button_draw(b_sair, buffer);
 
 		//MOUSE
 		draw_sprite(buffer, cursor, mouse_x - 6, mouse_y - 6);
@@ -516,6 +587,11 @@ void final_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, S
 		rest(10);
 		clear(buffer);
 	}
+
+	destroy_bitmap(sair);
+	destroy_bitmap(sair_highlight);
+
+	destroy_button(b_sair);
 }
 END_OF_FUNCTION(final_screen)
 
@@ -703,9 +779,8 @@ bool Desempilhar(PILHA *P, No *X, bool acabou)
 		No *lixo;
 
 		X->f = P->topo->f;
-		P->topo = P->topo->proximo;
-
 		lixo = P->topo;
+		P->topo = P->topo->proximo;
 		lixo = LiberaNo(lixo);
 
 		return true;
@@ -745,33 +820,55 @@ int ComparaPilhas(PILHA *P1, PILHA *P2)
 
 	return igualdades;
 }
-void imprimePILHA(PILHA *P, BITMAP *buffer, int width, int height)
+void imprimePILHA(PILHA *P, BITMAP *buffer, int width, int height, int jeito)
 {
 
 	No *aux;
 	aux = P->topo;
 
 	double contador = 0;
-
-	while (aux != NULL)
+	if (!jeito)
 	{
+		while (aux != NULL)
+		{
 
-		draw_sprite(buffer, aux->f->img, 1 + (80 * contador), height / 3);
-		contador += 1;
-		aux = aux->proximo;
+			draw_sprite(buffer, aux->f->img, 1 + (80 * contador), height / 2);
+			contador += 1;
+			aux = aux->proximo;
+		}
 	}
+	else
+	{
+		while (aux != NULL)
+		{
+
+			draw_sprite(buffer, aux->f->img, 1 + (80 * contador), height / 1.2);
+			contador += 1;
+			aux = aux->proximo;
+		}
+	}
+
+	draw_sprite(buffer, aux->f->img, 1 + (80 * contador), height / 3);
+	contador += 1;
+	aux = aux->proximo;
 }
+
 PILHA *LiberarPilha(PILHA *P)
 {
 
-	No *aux;
-	fruta *f;
-	f = criaFruta("MELAO");
-	aux = criaNo(f);
-	while (!Vazia(P))
+	if (!Vazia(P))
 	{
-		if (Desempilhar(P, aux, true))
-			;
+		No *proxNode,
+			*atual;
+
+		atual = P->topo;
+		while (atual != NULL)
+		{
+			proxNode = atual->proximo;
+			delete atual;
+			atual = proxNode;
+		}
+		P->topo = NULL;
 	}
 
 	return P;
@@ -837,6 +934,12 @@ bool Jogador::JogadorEmpilha(No *n)
 PILHA *Jogador::getPilha()
 {
 	return this->P;
+}
+
+void Jogador::LPilha()
+{
+
+	this->P = LiberarPilha(this->P);
 }
 //Jogo.cpp
 
