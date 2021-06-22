@@ -259,7 +259,7 @@ void config_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, 
 		textprintf_centre_ex(buffer, verdana, width / 3.5, height / 6, 0x0, -1, "Quantidade de frutas: ");
 		textprintf_centre_ex(buffer, verdana, width / 1.5, height / 6, 0x0, -1, "%d", game->getQtdFrutas());
 		textprintf_centre_ex(buffer, verdana, width / 3.5, height / 3, 0x0, -1, "Dificuldade do tempo: ");
-		textprintf_centre_ex(buffer, verdana, width / 1.5, height / 3, 0x0, -1, game->getDificuldade().c_str());
+		textprintf_centre_ex(buffer, verdana, width / 1.5, height / 3, 0x0, -1,"%s", game->getDificuldade().c_str());
 
 		//UPDATE
 		if (bSetaDireitaFrutas->ativado)
@@ -326,6 +326,29 @@ void config_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, 
 		rest(10);
 		clear(buffer);
 	}
+	/*
+	BITMAP *setaDireitaFrutas, *setaEsquerdaFrutas, *setaDireitaDificuldade, *setaEsquerdaDificuldade, *highlight, *voltar, *highlightDireitaFrutas, 
+	*highlightEsquerdaFrutas, *highlightDireitaDificuldade, *highlightEsquerdaDificuldade;
+	Button *bSetaDireitaFrutas, *bSetaEsquerdaFrutas, *bSetaDireitaDificuldade, *bSetaEsquerdaDificuldade, *b_voltar;
+	*/
+	destroy_bitmap(setaDireitaFrutas);
+	destroy_bitmap(setaEsquerdaFrutas);
+	destroy_bitmap(setaDireitaDificuldade);
+	destroy_bitmap(setaEsquerdaDificuldade);
+	destroy_bitmap(highlight);
+	destroy_bitmap(voltar);
+	destroy_bitmap(highlightDireitaFrutas);
+	destroy_bitmap(highlightEsquerdaFrutas);
+	destroy_bitmap(highlightEsquerdaDificuldade);
+	destroy_bitmap(highlightDireitaDificuldade);
+
+	destroy_button(bSetaDireitaFrutas);
+	destroy_button(bSetaEsquerdaFrutas);
+	destroy_button(bSetaDireitaDificuldade);
+	destroy_button(bSetaEsquerdaDificuldade);
+	destroy_button(b_voltar);
+
+
 }
 END_OF_FUNCTION(config_screen)
 
@@ -464,7 +487,7 @@ void game_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, SA
 							 "%02d: %02d", (((getTimer() / 1000) / 60) % 60), ((getTimer() / 1000) % 60));
 
 		//UPDATE
-		if (((((getTimer() / 1000) % 60) == 15) && ((((getTimer() / 1000) / 60) % 60)) == 0) || b_finalizar->ativado)
+		if (((((getTimer() / 1000) % 60) == 0) && ((((getTimer() / 1000) / 60) % 60)) == 0) || b_finalizar->ativado)
 		{
 			exit_screen = true;
 			*screen_state = FINALSCREEN;
@@ -474,34 +497,34 @@ void game_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, SA
 		//UPDATE DAS FRUTAS
 
 		//ABACAXI
-		verifica_botao(b_abacaxi, abacaxi, fruta_highlight, click, &(*j1), noh[0], &contadorPilha, height, 1);
+		verifica_botao(b_abacaxi, &(*j1), noh[0], &contadorPilha, height, 1);
 
 		//BANANA
-		verifica_botao(b_banana, banana, fruta_highlight, click, &(*j1), noh[1], &contadorPilha, height, 80);
+		verifica_botao(b_banana, &(*j1), noh[1], &contadorPilha, height, 80);
 
 		//MACA
-		verifica_botao(b_maca, maca, fruta_highlight, click, &(*j1), noh[2], &contadorPilha, height, 160);
+		verifica_botao(b_maca,&(*j1), noh[2], &contadorPilha, height, 160);
 
 		//LARANJA
-		verifica_botao(b_laranja, laranja, fruta_highlight, click, &(*j1), noh[3], &contadorPilha, height, 240);
+		verifica_botao(b_laranja, &(*j1), noh[3], &contadorPilha, height, 240);
 
 		//CAJU
-		verifica_botao(b_caju, caju, fruta_highlight, click, &(*j1), noh[4], &contadorPilha, height, 320);
+		verifica_botao(b_caju, &(*j1), noh[4], &contadorPilha, height, 320);
 
 		//FRAMBOESA
-		verifica_botao(b_framboesa, framboesa, fruta_highlight, click, &(*j1), noh[5], &contadorPilha, height, 400);
+		verifica_botao(b_framboesa, &(*j1), noh[5], &contadorPilha, height, 400);
 
 		//ABACATE
-		verifica_botao(b_abacate, abacate, fruta_highlight, click, &(*j1), noh[6], &contadorPilha, height, 480);
+		verifica_botao(b_abacate, &(*j1), noh[6], &contadorPilha, height, 480);
 
 		//MORANGO
-		verifica_botao(b_morango, morango, fruta_highlight, click, &(*j1), noh[7], &contadorPilha, height, 560);
+		verifica_botao(b_morango, &(*j1), noh[7], &contadorPilha, height, 560);
 
 		//UVA
-		verifica_botao(b_uva, uva, fruta_highlight, click, &(*j1), noh[8], &contadorPilha, height, 640);
+		verifica_botao(b_uva, &(*j1), noh[8], &contadorPilha, height, 640);
 
 		//MELANCIA
-		verifica_botao(b_melancia, melancia, fruta_highlight, click, &(*j1), noh[9], &contadorPilha, height, 720);
+		verifica_botao(b_melancia, &(*j1), noh[9], &contadorPilha, height, 720);
 
 		//BUTTONS
 		button_draw(b_abacaxi, buffer);
@@ -587,7 +610,7 @@ void final_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, S
 
 		//Titulo do jogo
 		textprintf_centre_ex(buffer, verdana, width / 2, height / 12, 0x0, -1, "Tela final");
-		textprintf_centre_ex(buffer, verdana, width / 2, height / 10, 0x0, -1, "Voce acertou %d de 10", resultado);
+		textprintf_centre_ex(buffer, verdana, width / 2, height / 10, 0x0, -1, "Voce acertou %d de %d", resultado,game->getQtdFrutas());
 
 		textprintf_centre_ex(buffer, verdana, width / 2, height / 3, 0x0, -1, "Pilha correta:");
 		textprintf_centre_ex(buffer, verdana, width / 2, height / 1.3, 0xfffffff, -1, "Pilha do %s:", j1->getNome().c_str());
@@ -626,34 +649,27 @@ void final_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, S
 }
 END_OF_FUNCTION(final_screen)
 
-void verifica_botao(Button *b1, BITMAP *iFruta, BITMAP *highlight, SAMPLE *click, Jogador *j1, No *noh, int *cont, int height, int dF)
+void verifica_botao(Button *b1, Jogador *j1, No *noh, int *cont, int height, int dF)
 {
 
-	if (b1->ativado && b1 && iFruta && highlight && click)
+	if (b1->ativado && b1)
 	{
 
-		bool entrou = false;
 		b1->ativado = false;
-		if (b1->pos_y == (600 / 1.2) && Empilhar(j1->getPilha(), noh))
+
+		if (b1->pos_y == (500) && Empilhar(j1->getPilha(), noh))
 		{
-			destroy_button(b1);
-			b1 = create_button(iFruta, highlight, click, 720 - ((*cont) * (80)), height / 2);
+			change_pos_button(720 -((*cont)*(80)),height/2,b1);
+
 			*cont += 1;
-			entrou = true;
 		}
 		else
 		{
 			if (Desempilhar(j1->getPilha(), noh, false))
 			{
-				destroy_button(b1);
-				b1 = create_button(iFruta, highlight, click, dF, height / 1.2);
+				change_pos_button(dF,height/1.2,b1);
 				*cont -= 1;
-				entrou = true;
 			}
-		}
-		if (entrou)
-		{
-			button_input(b1);
 		}
 	}
 }

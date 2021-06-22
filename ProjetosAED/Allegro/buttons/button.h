@@ -24,6 +24,7 @@ Button* create_button(BITMAP* image, BITMAP* h_image, SAMPLE* h_effect, int x, i
 void button_input(Button* b);
 void button_draw(Button* b, BITMAP* buffer);
 void destroy_button(Button* b);
+void change_pos_button(int x, int y,Button *b1);
 
 
 #endif // BUTTON_H_INCLUDED

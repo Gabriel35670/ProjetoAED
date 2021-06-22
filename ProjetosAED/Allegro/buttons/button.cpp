@@ -16,6 +16,13 @@ Button* create_button(BITMAP* image, BITMAP* h_image, SAMPLE* h_effect, int x, i
    return b;
 }
 
+void change_pos_button(int x, int y,Button *b1){
+
+    b1->pos_x = x;
+    b1->pos_y = y;
+
+}
+
 void button_input(Button* b)
 {
   if(mouse_x > b->pos_x && mouse_x < b->pos_x + b->img->w
