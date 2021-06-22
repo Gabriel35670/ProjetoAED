@@ -5,11 +5,9 @@
 #include <allegro.h>
 #include <iostream>
 
+void inicia_timer(int tempSeq);
 
-
-void inicia_timer();
-
-void incremeta_timer();
+void decrementa_timer();
 
 volatile int getTimer();
 

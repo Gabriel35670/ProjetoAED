@@ -95,7 +95,7 @@ private:
     static int contador;
 
 public:
-    Jogador(string nome,int t);
+    Jogador(string nome, int t);
     ~Jogador();
 
     void setNome(string);
@@ -123,9 +123,10 @@ private:
     int tempoSequencia;
     int tempoGameplay;
     int qtdFrutas;
+    string dificuldade;
 
 public:
-    Jogo(int tempoSeq, int tempoGam, int qtdFrutas);
+    Jogo(int tempoSeq, int tempoGam, int qtdFrutas, string dif);
     ~Jogo();
 
     void setTempoSeq(int);
@@ -134,6 +135,8 @@ public:
     int getTempoGam() const;
     void setQtdFrutas(int);
     int getQtdFrutas() const;
+    void setDificuldade(string);
+    string getDificuldade() const;
     void embaralha(PILHA *P);
     void iniciarTempoGam();
     void iniciarTempoSeq();
