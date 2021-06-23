@@ -3,6 +3,7 @@
 
 #include <allegro.h>
 #include <stdlib.h>
+#include <string>
 
 typedef struct button
 {
@@ -25,6 +26,7 @@ void button_input(Button* b);
 void button_draw(Button* b, BITMAP* buffer);
 void destroy_button(Button* b);
 void change_pos_button(int x, int y,Button *b1);
+void digita(std::string *n);
 
 
 #endif // BUTTON_H_INCLUDED

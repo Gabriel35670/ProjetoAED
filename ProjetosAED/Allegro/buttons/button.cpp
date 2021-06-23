@@ -66,3 +66,179 @@ void destroy_button(Button* b)
 {
     free(b);
 }
+
+using namespace std;
+
+void digita(string *n){
+    string letra;
+    bool apaga = false;
+
+    if(key[KEY_A]){
+
+        key[KEY_A] = false;
+        letra = "a";
+    }
+
+    if(key[KEY_B]){
+        key[KEY_B] = false;
+        letra = "b";
+    }
+
+    if(key[KEY_C]){
+        key[KEY_C] = false;
+        letra = "c";
+    }
+
+    if(key[KEY_D]){
+        letra = "d";
+        key[KEY_D] = false;
+    }
+    if(key[KEY_E]){
+        letra = "e";
+        key[KEY_E] = false;
+    }
+    if(key[KEY_F]){
+        letra = "f";
+        key[KEY_F] = false;
+    }
+    if(key[KEY_G]){
+        letra = "g";
+        key[KEY_G] = false;
+    }
+    if(key[KEY_H]){
+        letra = "h";
+        key[KEY_H] = false;
+    }
+    if(key[KEY_I]){
+        letra = "i";
+        key[KEY_I] = false;
+    }
+    if(key[KEY_J]){
+        letra = "j";
+        key[KEY_J] = false;
+    }
+    if(key[KEY_K]){
+        letra = "k";
+        key[KEY_K] = false;
+    }
+    if(key[KEY_L]){
+        letra = "l";
+        key[KEY_L] = false;
+    }
+
+    if(key[KEY_M]){
+        letra = "m";
+        key[KEY_M] = false;
+    }
+    if(key[KEY_N]){
+        letra = "n";
+        key[KEY_N] = false;
+    }
+    if(key[KEY_O]){
+        letra = "o";
+        key[KEY_O] = false;
+    }
+    if(key[KEY_P]){
+        letra = "p";
+        key[KEY_P] = false;
+    }
+    if(key[KEY_Q]){
+        letra = "q";
+        key[KEY_Q] = false;
+    }
+    if(key[KEY_R]){
+        letra = "r";
+        key[KEY_R] = false;
+    }
+    if(key[KEY_S]){
+        letra = "s";
+        key[KEY_S] = false;
+    }
+    if(key[KEY_T]){
+        letra = "t";
+        key[KEY_T] = false;
+    }
+    if(key[KEY_U]){
+        letra = "u";
+        key[KEY_U] = false;
+    }
+    if(key[KEY_V]){
+        letra = "v";
+        key[KEY_V] = false;
+    }
+    if(key[KEY_W]){
+        letra = "w";
+        key[KEY_W] = false;
+    }
+    if(key[KEY_X]){
+        letra = "x";
+        key[KEY_X] = false;
+    }
+    if(key[KEY_Y]){
+        letra = "y";
+        key[KEY_Y] = false;
+    }
+    if(key[KEY_Z]){
+        letra = "z";
+        key[KEY_Z] = false;
+    }
+    if(key[KEY_BACKSPACE] && n->length() > 0){
+        key[KEY_BACKSPACE] = false;
+        apaga = true;
+    }
+    if(key[KEY_1]){
+        letra = "1";
+        key[KEY_1] = false;
+    }
+
+    if(key[KEY_2]){
+        letra = "2";
+        key[KEY_2] = false;
+    }
+    if(key[KEY_3]){
+        letra = "3";
+        key[KEY_3] = false;
+    }
+    if(key[KEY_4]){
+        letra = "4";
+        key[KEY_4] = false;
+    }
+    if(key[KEY_5]){
+        letra = "5";
+        key[KEY_5] = false;
+    }
+    if(key[KEY_6]){
+        letra = "6";
+        key[KEY_6] = false;
+    }
+    if(key[KEY_7]){
+        letra = "7";
+        key[KEY_7] = false;
+    }
+    if(key[KEY_9]){
+        letra = "9";
+        key[KEY_9] = false;
+    }
+    if(key[KEY_0]){
+        letra = "0";
+        key[KEY_0] = false;
+    }
+    if(key[KEY_8]){
+        letra = "8";
+        key[KEY_8] = false;
+    }
+     if(key[KEY_SPACE] && n->length() < 19){
+        letra = " ";
+        key[KEY_SPACE] = false;
+    }
+    /*
+    Oque falta adicionar -> todos os touchpads
+    */
+    
+    if(!apaga && n->length() < 20)
+        *n += letra;
+    else if(apaga)
+        n->pop_back();   
+        
+}
+

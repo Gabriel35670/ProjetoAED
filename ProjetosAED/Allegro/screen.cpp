@@ -122,6 +122,8 @@ void single_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, 
 	b_start = create_button(start, start_highlight, click, width / 1.2, height / 1.2);
 	b_voltar = create_button(voltar, voltar_highlight, click, width / 12, height / 11.5);
 
+	string name = j->getNome();
+
 	while (!(key[KEY_ESC] || exit_screen))
 	{
 
@@ -137,8 +139,11 @@ void single_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, 
 
 		//Titulo do jogo
 		textprintf_centre_ex(buffer, verdana, width / 2, height / 12, 0x0, -1, "Single screen");
-		textprintf_centre_ex(buffer, verdana, width / 2.7, height / 2.9, 0x0, -1, "%s", j->getNome().c_str());
+		textprintf_centre_ex(buffer, verdana, width / 2.7, height / 2.9, 0x0, -1, "%s",name.c_str() );
 		//UPDATE
+
+		digita(&name);
+
 		if (b_start->ativado)
 		{
 			exit_screen = true;
@@ -167,6 +172,9 @@ void single_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, 
 		rest(10);
 		clear(buffer);
 	}
+	//Muda nome
+	j->setNome(name);
+
 	destroy_bitmap(voltar_highlight);
 	destroy_bitmap(voltar);
 	destroy_bitmap(nome);
