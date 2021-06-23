@@ -4,6 +4,8 @@
 #include <allegro.h>
 #include <stdlib.h>
 #include <string>
+#include <cctype>
+#include <iostream>
 
 typedef struct button
 {
@@ -29,4 +31,4 @@ void change_pos_button(int x, int y,Button *b1);
 void digita(std::string *n);
 
 
-#endif // BUTTON_H_INCLUDED
+#endif // BUTTON_H_I

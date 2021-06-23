@@ -133,9 +133,12 @@ int main()
 
 	destroy_font(verdana);
 
-	P_principal = LiberarPilha(P_principal);
-	j1->LPilha();
-	delete j1;
+	if(screen_state != TITLESCREEN){
+		P_principal = LiberarPilha(P_principal);
+		j1->LPilha();
+		delete j1;
+		delete game;
+	}
 
 	return 0;
 }

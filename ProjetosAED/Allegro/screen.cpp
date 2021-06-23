@@ -173,7 +173,8 @@ void single_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, 
 		clear(buffer);
 	}
 	//Muda nome
-	j->setNome(name);
+	if(*screen_state == MEMORYSCREEN)
+		j->setNome(name);
 
 	destroy_bitmap(voltar_highlight);
 	destroy_bitmap(voltar);

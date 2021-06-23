@@ -186,46 +186,56 @@ void digita(string *n){
         key[KEY_BACKSPACE] = false;
         apaga = true;
     }
-    if(key[KEY_1]){
+    if(key[KEY_1] || key[KEY_1_PAD]){
         letra = "1";
         key[KEY_1] = false;
+        key[KEY_1_PAD] = false;
     }
 
-    if(key[KEY_2]){
+    if(key[KEY_2] || key[KEY_2_PAD]){
         letra = "2";
         key[KEY_2] = false;
+        key[KEY_2_PAD] = false;
     }
-    if(key[KEY_3]){
+    if(key[KEY_3] || key[KEY_3_PAD]){
         letra = "3";
         key[KEY_3] = false;
+        key[KEY_3_PAD] = false;
     }
-    if(key[KEY_4]){
+    if(key[KEY_4] || key[KEY_4_PAD]){
         letra = "4";
         key[KEY_4] = false;
+        key[KEY_4_PAD] = false;
     }
-    if(key[KEY_5]){
+    if(key[KEY_5] || key[KEY_5_PAD]){
         letra = "5";
         key[KEY_5] = false;
+        key[KEY_5_PAD] = false;
     }
-    if(key[KEY_6]){
+    if(key[KEY_6] || key[KEY_6_PAD]){
         letra = "6";
         key[KEY_6] = false;
+        key[KEY_6_PAD] = false;
     }
-    if(key[KEY_7]){
+    if(key[KEY_7] || key[KEY_7_PAD]){
         letra = "7";
         key[KEY_7] = false;
+        key[KEY_7_PAD] = false;
     }
-    if(key[KEY_9]){
+    if(key[KEY_9] || key[KEY_9_PAD]){
         letra = "9";
         key[KEY_9] = false;
+        key[KEY_9_PAD] = false;
     }
-    if(key[KEY_0]){
+    if(key[KEY_0] || key[KEY_0_PAD]){
         letra = "0";
         key[KEY_0] = false;
+        key[KEY_0_PAD] = false;
     }
-    if(key[KEY_8]){
+    if(key[KEY_8] || key[KEY_8_PAD]){
         letra = "8";
         key[KEY_8] = false;
+        key[KEY_8_PAD] = false;
     }
      if(key[KEY_SPACE] && n->length() < 19){
         letra = " ";
@@ -234,11 +244,10 @@ void digita(string *n){
     /*
     Oque falta adicionar -> todos os touchpads
     */
-    
     if(!apaga && n->length() < 20)
         *n += letra;
     else if(apaga)
-        n->pop_back();   
+        n->pop_back();  
         
 }
 
