@@ -6,6 +6,9 @@
 using namespace std;
 /* g++ -Wall main.cpp -o programa `allegro-config --libs` 
 SO: Linux
+
+g++ main.cpp screen.cpp timer/timer.cpp buttons/button.cpp -o ed -I c:\MinGW\include -L c:\MinGW\lib C:\MinGW\lib\liballeg.a 
+SO: Windows
 */
 //funções
 volatile int sai = 0;
@@ -28,6 +31,7 @@ enum
 	MEMORYSCREEN,
 	GAMESCREEN,
 	FINALSCREEN,
+	FINALSCREENMULTI,
 	CONFIGSCREEN,
 	OUT
 };
@@ -69,9 +73,10 @@ int main()
 	//int single =0;
 	PILHA *P_principal;
 	Jogador *j1;
+	Jogador *j2;
 	bool jafoi = false;
 	Jogo *game = new Jogo(16000, 90000, 5, "Facil");
-
+	int multi_single;
 	while (!(sai || key[KEY_ESC]))
 	{
 		if (game->getDificuldade() == "Facil")
@@ -96,20 +101,38 @@ int main()
 
 			if (!jafoi)
 			{
-				j1 = new Jogador("", game->getQtdFrutas());
+				j1 = new Jogador("Jogador 1", game->getQtdFrutas());
 				jafoi = true;
 			}
 
 			single_screen(buffer, logo, cursor, verdana, click, height, width, &screen_state, j1, game);
 			if (screen_state == MEMORYSCREEN)
+			{
+				multi_single = 0;
 				P_principal = CriarPilha(game->getQtdFrutas());
+			}
 			else
 				jafoi = false;
 		}
 
 		else if (screen_state == MSCREEN)
-			multi_screen(buffer, logo, cursor, verdana, click, height, width, &screen_state, game);
+		{
+			if (!jafoi)
+			{
+				j1 = new Jogador("Jogador 1", game->getQtdFrutas());
+				j2 = new Jogador("Jogador 2", game->getQtdFrutas());
+				jafoi = true;
+			}
 
+			multi_screen(buffer, logo, cursor, verdana, click, height, width, &screen_state, game, j1, j2);
+			if (screen_state == MEMORYSCREEN)
+			{
+				multi_single = 1;
+				P_principal = CriarPilha(game->getQtdFrutas());
+			}
+			else
+				jafoi = false;
+		}
 		else if (screen_state == CONFIGSCREEN)
 			config_screen(buffer, logo, cursor, verdana, click, height, width, &screen_state, game);
 
@@ -117,10 +140,27 @@ int main()
 			memory_screen(buffer, logo, cursor, verdana, click, height, width, &screen_state, P_principal, game);
 
 		else if (screen_state == GAMESCREEN)
-			game_screen(buffer, logo, cursor, verdana, click, height, width, &screen_state, j1, game);
+			for (int i = 0; i <= multi_single; i++)
+			{
+				if (i == 0)
 
+					game_screen(buffer, logo, cursor, verdana, click, height, width, &screen_state, j1, game);
+
+				else if (i == 1)
+				{
+					game_screen(buffer, logo, cursor, verdana, click, height, width, &screen_state, j2, game);
+					screen_state = FINALSCREENMULTI;
+				}
+
+				if (multi_screen == 0)
+				{
+					screen_state = FINALSCREEN;
+				}
+			}
 		else if (screen_state == FINALSCREEN)
 			final_screen(buffer, logo, cursor, verdana, click, height, width, &screen_state, P_principal, j1, game);
+		else if (screen_state == FINALSCREENMULTI)
+			final_screen_multi(buffer, logo, cursor, verdana, click, height, width, &screen_state, P_principal, j1, j2, game);
 		else if (screen_state == OUT)
 			key[KEY_ESC] = true;
 	}
@@ -133,7 +173,8 @@ int main()
 
 	destroy_font(verdana);
 
-	if(screen_state != TITLESCREEN){
+	if (screen_state != TITLESCREEN)
+	{
 		P_principal = LiberarPilha(P_principal);
 		j1->LPilha();
 		delete j1;
