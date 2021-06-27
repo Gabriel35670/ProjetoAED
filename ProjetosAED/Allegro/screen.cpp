@@ -732,7 +732,7 @@ void final_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, S
 	BITMAP *irMenu_highlight = load_bitmap("BITMAPS/Final/irMenu_highlight.bmp", NULL);
 
 	//BUTTONS
-	Button *b_irMenu = create_button(irMenu, irMenu_highlight, click, width / 2.5, height / 8);
+	Button *b_irMenu = create_button(irMenu, irMenu_highlight, click, width / 2.5, height / 6);
 
 	bool exit_screen = false;
 
@@ -749,10 +749,9 @@ void final_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, S
 		draw_sprite(buffer, logo, 0, 0);
 
 		//Titulo do jogo
-		textprintf_centre_ex(buffer, verdana, width / 2, height / 12, 0x0, -1, "Tela final");
 		textprintf_centre_ex(buffer, verdana, width / 2, height / 10, 0x0, -1, "Voce acertou %d de %d", resultado, game->getQtdFrutas());
 
-		textprintf_centre_ex(buffer, verdana, width / 2, height / 3, 0x0, -1, "Pilha correta:");
+		textprintf_centre_ex(buffer, verdana, width / 2, height / 2.5, 0x0, -1, "Pilha correta:");
 		textprintf_centre_ex(buffer, verdana, width / 2, height / 1.3, 0xfffffff, -1, "Pilha do %s:", j1->getNome().c_str());
 
 		//IMPRESSAO DAS PILHAS
