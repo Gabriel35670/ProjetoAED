@@ -1,7 +1,4 @@
 #include "screen.h"
-
-//screen.h
-
 enum
 {
 	TITLESCREEN,
@@ -19,8 +16,8 @@ enum
 void menu(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, SAMPLE *click, int height, int width, int *screen_state, Jogo *game)
 {
 
-	BITMAP *single, *single_highlight, *multi, *multi_highlight, *config, *config_highlight, *logo_game;
-	Button *b_single, *b_multi, *b_config;
+	BITMAP *single, *single_highlight, *multi, *multi_highlight, *config, *config_highlight, *logo_game, *sair_highlight, *sair;
+	Button *b_single, *b_multi, *b_config, *b_sair;
 
 	//BITMAPS
 	single = load_bitmap("BITMAPS/Tittle/Single.bmp", NULL);
@@ -34,10 +31,16 @@ void menu(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, SAMPLE *c
 
 	logo_game = load_bitmap("BITMAPS/Tittle/logo.bmp", NULL);
 
+	sair = load_bitmap("BITMAPS/Final/sair.bmp", NULL);
+	sair_highlight = load_bitmap("BITMAPS/Final/sair_highlight.bmp", NULL);
+
+
 	//BUTTONS
 	b_single = create_button(single, single_highlight, click, 90, height / 1.32);
 	b_multi = create_button(multi, multi_highlight, click, 90, height / 1.2);
 	b_config = create_button(config, config_highlight, click, 90, height / 1.1);
+	b_sair = create_button(sair, sair_highlight, click, width-200, height / 9);
+
 
 	bool exit_screen = false;
 
@@ -48,6 +51,7 @@ void menu(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, SAMPLE *c
 		button_input(b_single);
 		button_input(b_multi);
 		button_input(b_config);
+		button_input(b_sair);
 
 		//Tela de fundo
 		draw_sprite(buffer, logo, 0, 0);
@@ -71,11 +75,16 @@ void menu(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, SAMPLE *c
 			exit_screen = true;
 			*screen_state = CONFIGSCREEN;
 		}
+		else if(b_sair->ativado){
+			exit_screen = true;
+			*screen_state = OUT;
+		}
 
 		//BUTTONS
 		button_draw(b_single, buffer);
 		button_draw(b_multi, buffer);
 		button_draw(b_config, buffer);
+		button_draw(b_sair,buffer);
 
 		//MOUSE
 		draw_sprite(buffer, cursor, mouse_x - 6, mouse_y - 6);
@@ -106,7 +115,7 @@ END_OF_FUNCTION(menu)
 void single_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, SAMPLE *click, int height, int width, int *screen_state, Jogador *j, Jogo *game)
 {
 
-	BITMAP *nome, *voltar, *voltar_highlight, *start, *start_highlight, *edit, *edit_highlight, *check, *check_highlight;
+	BITMAP *voltar, *voltar_highlight, *start, *start_highlight, *edit, *edit_highlight, *check, *check_highlight;
 	Button *b_start, *b_voltar, *b_editName, *b_checkName;
 
 	bool exit_screen = false;
@@ -198,9 +207,9 @@ void single_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, 
 
 	destroy_bitmap(voltar_highlight);
 	destroy_bitmap(voltar);
-	destroy_bitmap(nome);
 	destroy_bitmap(start);
 	destroy_bitmap(start_highlight);
+
 	destroy_bitmap(check);
 	destroy_bitmap(check_highlight);
 	destroy_bitmap(edit);
@@ -217,7 +226,7 @@ END_OF_FUNCTION(single_screen)
 void multi_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, SAMPLE *click, int height, int width, int *screen_state, Jogo *game, Jogador *j1, Jogador *j2)
 {
 
-	BITMAP *nome, *voltar, *voltar_highlight, *start, *start_highlight, *edit, *edit_highlight, *check, *check_highlight;
+	BITMAP *voltar, *voltar_highlight, *start, *start_highlight, *edit, *edit_highlight, *check, *check_highlight;
 	Button *b_start, *b_voltar, *b_editName1, *b_checkName1, *b_editName2, *b_checkName2;
 
 	bool exit_screen = false;
@@ -235,7 +244,6 @@ void multi_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, S
 	check = load_bitmap("BITMAPS/Single/check.bmp", NULL);
 	check_highlight = load_bitmap("BITMAPS/Single/highlightCheck.bmp", NULL);
 
-	nome = load_bitmap("BITMAPS/Single/nome.bmp", NULL);
 
 	//BUTTONS
 	b_start = create_button(start, start_highlight, click, width / 1.2, height / 1.2);
@@ -333,7 +341,6 @@ void multi_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, S
 
 	destroy_bitmap(voltar_highlight);
 	destroy_bitmap(voltar);
-	destroy_bitmap(nome);
 	destroy_bitmap(start);
 	destroy_bitmap(start_highlight);
 
@@ -455,11 +462,25 @@ void config_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, 
 		rest(10);
 		clear(buffer);
 	}
-	/*
-	BITMAP *setaDireitaFrutas, *setaEsquerdaFrutas, *setaDireitaDificuldade, *setaEsquerdaDificuldade, *highlight, *voltar, *highlightDireitaFrutas, 
-	*highlightEsquerdaFrutas, *highlightDireitaDificuldade, *highlightEsquerdaDificuldade;
-	Button *bSetaDireitaFrutas, *bSetaEsquerdaFrutas, *bSetaDireitaDificuldade, *bSetaEsquerdaDificuldade, *b_voltar;
-	*/
+	
+
+	//Seta o tempo de acordo com a dificuldade
+	
+	if (game->getDificuldade() == "Facil")
+		{
+			game->setTempoSeq(16000);
+			game->setTempoGam(90000);
+		}
+		else if (game->getDificuldade() == "Medio")
+		{
+			game->setTempoSeq(11000);
+			game->setTempoGam(60000);
+		}
+		else if (game->getDificuldade() == "Dificil")
+		{
+			game->setTempoSeq(6000);
+			game->setTempoGam(30000);
+		}
 	destroy_bitmap(setaDireita);
 	destroy_bitmap(setaEsquerda);
 	destroy_bitmap(highlight);
@@ -479,13 +500,10 @@ void memory_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, 
 {
 
 	bool exit_screen = false;
-	//P = CriarPilha(10);
 	game->embaralha(P);
 
-	//int tamanho = P1->tamanhoMAX;
 
 	inicia_timer(game->getTempoSeq());
-	//int controle = getTimer();
 
 	while (!(key[KEY_ESC] || exit_screen))
 	{
@@ -495,7 +513,7 @@ void memory_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, 
 		//Tela de fundo
 		draw_sprite(buffer, logo, 0, 0);
 
-		//Titulo do jogo
+		//EScrita topo da pagina
 		textprintf_centre_ex(buffer, verdana, width / 2, height / 12, 0x0, -1, "Pilha Correta, memorize a ordem!");
 
 		//TIMER
@@ -708,13 +726,13 @@ void final_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, S
 {
 
 	//BITMAPS
-	BITMAP *sair = load_bitmap("BITMAPS/Final/sair.bmp", NULL);
+	BITMAP *irMenu = load_bitmap("BITMAPS/Final/irMenu.bmp", NULL);
 
 	//BITMAPS(highlights)
-	BITMAP *sair_highlight = load_bitmap("BITMAPS/Final/sair_highlight.bmp", NULL);
+	BITMAP *irMenu_highlight = load_bitmap("BITMAPS/Final/irMenu_highlight.bmp", NULL);
 
 	//BUTTONS
-	Button *b_sair = create_button(sair, sair_highlight, click, width / 2.5, height / 8);
+	Button *b_irMenu = create_button(irMenu, irMenu_highlight, click, width / 2.5, height / 8);
 
 	bool exit_screen = false;
 
@@ -725,7 +743,7 @@ void final_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, S
 	{
 
 		//Botoes iniciados
-		button_input(b_sair);
+		button_input(b_irMenu);
 
 		//Tela de fundo
 		draw_sprite(buffer, logo, 0, 0);
@@ -742,16 +760,18 @@ void final_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, S
 		imprimePILHA(j1->getPilha(), buffer, width, height / 1.2, game->getQtdFrutas(), verdana);
 
 		//UPDATE
-		if (b_sair->ativado)
+		if (b_irMenu->ativado)
 		{
-			*screen_state = OUT;
+			*screen_state = TITLESCREEN;
 			exit_screen = true;
 			P = LiberarPilha(P);
 			j1->LPilha();
+			delete j1;
+			delete P;
 		}
 
 		//BUTTONS
-		button_draw(b_sair, buffer);
+		button_draw(b_irMenu, buffer);
 
 		//MOUSE
 		draw_sprite(buffer, cursor, mouse_x - 6, mouse_y - 6);
@@ -764,10 +784,10 @@ void final_screen(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verdana, S
 		clear(buffer);
 	}
 
-	destroy_bitmap(sair);
-	destroy_bitmap(sair_highlight);
+	destroy_bitmap(irMenu);
+	destroy_bitmap(irMenu_highlight);
 
-	destroy_button(b_sair);
+	destroy_button(b_irMenu);
 }
 END_OF_FUNCTION(final_screen)
 
@@ -775,24 +795,26 @@ void final_screen_multi(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verd
 {
 
 	//BITMAPS
-	BITMAP *sair = load_bitmap("BITMAPS/Final/sair.bmp", NULL);
+	BITMAP *irMenu = load_bitmap("BITMAPS/Final/irMenu.bmp", NULL);
 
 	//BITMAPS(highlights)
-	BITMAP *sair_highlight = load_bitmap("BITMAPS/Final/sair_highlight.bmp", NULL);
+	BITMAP *irMenu_highlight = load_bitmap("BITMAPS/Final/irMenu_highlight.bmp", NULL);
 
 	//BUTTONS
-	Button *b_sair = create_button(sair, sair_highlight, click, width / 2.5, height / 8);
+	Button *b_irMenu = create_button(irMenu, irMenu_highlight, click, width / 2.5, height / 8);
 
 	bool exit_screen = false;
 
 	//Comparar pilhas
 	int resultado = ComparaPilhas(P, j1->getPilha());
 	int resultado2 = ComparaPilhas(P, j2->getPilha());
+
+
 	while (!(key[KEY_ESC] || exit_screen))
 	{
 
 		//Botoes iniciados
-		button_input(b_sair);
+		button_input(b_irMenu);
 
 		//Tela de fundo
 		draw_sprite(buffer, logo, 0, 0);
@@ -815,16 +837,20 @@ void final_screen_multi(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verd
 		imprimePILHA(j1->getPilha(), buffer, width, 300, game->getQtdFrutas(), verdana);
 		imprimePILHA(j2->getPilha(), buffer, width, 500, game->getQtdFrutas(), verdana);
 		//UPDATE
-		if (b_sair->ativado)
+		if (b_irMenu->ativado)
 		{
-			*screen_state = OUT;
+			*screen_state = TITLESCREEN;
 			exit_screen = true;
 			P = LiberarPilha(P);
 			j1->LPilha();
+			j2->LPilha();
+			delete j1;
+			delete j2;
+			delete P;
 		}
 
 		//BUTTONS
-		button_draw(b_sair, buffer);
+		button_draw(b_irMenu, buffer);
 
 		//MOUSE
 		draw_sprite(buffer, cursor, mouse_x - 6, mouse_y - 6);
@@ -837,10 +863,10 @@ void final_screen_multi(BITMAP *buffer, BITMAP *logo, BITMAP *cursor, FONT *verd
 		clear(buffer);
 	}
 
-	destroy_bitmap(sair);
-	destroy_bitmap(sair_highlight);
+	destroy_bitmap(irMenu);
+	destroy_bitmap(irMenu_highlight);
 
-	destroy_button(b_sair);
+	destroy_button(b_irMenu);
 }
 END_OF_FUNCTION(final_screen)
 
@@ -866,404 +892,5 @@ void verifica_botao(Button *b1, Jogador *j1, No *noh, int *cont, int height, int
 				*cont -= 1;
 			}
 		}
-	}
-}
-
-//Fruta.cpp
-string getFileName(string n)
-{
-
-	//File names
-	string v[10] = {"Pilha/F/abacaxi.bmp", "Pilha/F/banana.bmp", "Pilha/F/maca.bmp", "Pilha/F/laranja.bmp", "Pilha/F/caju.bmp",
-					"Pilha/F/framboesa.bmp", "Pilha/F/abacate.bmp", "Pilha/F/morango.bmp", "Pilha/F/uva.bmp", "Pilha/F/melancia.bmp"};
-
-	string v2[10] = {"abacaxi", "banana", "maca", "laranja", "caju", "framboesa", "abacate", "morango", "uva", "melancia"};
-
-	int pos = 0;
-	bool achou = false;
-
-	while (pos < 10 && !achou)
-	{
-		if (n == v2[pos])
-			achou = true;
-		pos++;
-	}
-	pos -= 1;
-	return v[pos];
-}
-
-fruta *criaFruta(string n)
-{
-
-	fruta *novaFruta = new fruta;
-
-	novaFruta->nome = n;
-	string file_name = getFileName(n);
-	novaFruta->img = load_bitmap(file_name.c_str(), NULL);
-
-	return novaFruta;
-}
-
-bool igual(fruta *f1, fruta *f2)
-{
-
-	if (f1->nome == f2->nome)
-		return true;
-	return false;
-}
-
-vector<fruta *> vet_frutas(int x)
-{
-
-	string v[10] = {"abacaxi", "banana", "maca", "laranja", "caju", "framboesa", "abacate", "morango", "uva", "melancia"};
-
-	vector<fruta *> frutas;
-
-	fruta *aux;
-
-	for (int i = 0; i < x; i++)
-	{
-
-		aux = criaFruta(v[i]);
-
-		frutas.push_back(aux);
-	}
-
-	return frutas;
-}
-
-//No.cpp
-No *criaNo(fruta *fruta)
-{
-
-	No *N;
-	N = new No;
-
-	N->proximo = NULL;
-	N->f = fruta;
-
-	return N;
-}
-
-No *LiberaNo(No *X)
-{
-
-	delete X;
-
-	return X;
-}
-
-//Pilha.cpp
-
-PILHA *CriarPilha(int tamanhoMAX)
-{
-
-	PILHA *P = new PILHA;
-	P->tamanhoMAX = tamanhoMAX;
-	P->topo = NULL;
-
-	return P;
-}
-bool Cheia(PILHA *P)
-{
-
-	int contador = 0;
-	No *aux = P->topo;
-	while (aux != NULL)
-	{
-		aux = aux->proximo;
-		contador++;
-	}
-
-	return contador == P->tamanhoMAX;
-}
-
-bool Vazia(PILHA *P)
-{
-
-	return P->topo == NULL;
-}
-
-bool Empilhar(PILHA *P, No *novo)
-{
-
-	if (Cheia(P) || novo == NULL)
-	{
-		return false;
-	}
-	else
-	{
-		if (Vazia(P))
-		{
-			novo->proximo = NULL;
-			P->topo = novo;
-		}
-		else
-		{
-			No *aux;
-			aux = P->topo;
-			P->topo = novo;
-			P->topo->proximo = aux;
-		}
-	}
-	return true;
-}
-
-bool Desempilhar(PILHA *P, No *X, bool acabou)
-{
-
-	if (Vazia(P))
-	{
-		return false;
-	}
-	if (acabou && P->topo == X)
-	{
-		No *lixo;
-
-		X->f = P->topo->f;
-		lixo = P->topo;
-		P->topo = P->topo->proximo;
-		lixo = LiberaNo(lixo);
-
-		return true;
-	}
-	else
-	{
-		if (P->topo == X)
-		{
-			X->f = P->topo->f;
-			P->topo = P->topo->proximo;
-			return true;
-		}
-	}
-
-	return false;
-}
-
-int ComparaPilhas(PILHA *P1, PILHA *P2)
-{
-
-	int igualdades = 0;
-
-	No *N1 = P1->topo;
-	No *N2 = P2->topo;
-
-	while (N1 != NULL && N2 != NULL)
-	{
-
-		if (igual(N1->f, N2->f))
-		{
-
-			igualdades++;
-		}
-		N1 = N1->proximo;
-		N2 = N2->proximo;
-	}
-
-	return igualdades;
-}
-void imprimePILHA(PILHA *P, BITMAP *buffer, int width, int height, int tamanhoP, FONT *verdana)
-{
-
-	No *aux;
-	int tamanhoOcup = tamanhoP * 80;
-	double contador = 0;
-
-	aux = P->topo;
-	while (aux != NULL)
-	{
-		draw_sprite(buffer, aux->f->img, (799 - tamanhoOcup) + ((contador) * (80)), height);
-		contador += 1;
-		aux = aux->proximo;
-	}
-}
-PILHA *LiberarPilha(PILHA *P)
-{
-
-	if (!Vazia(P))
-	{
-		No *proxNode,
-			*atual;
-
-		atual = P->topo;
-		while (atual != NULL)
-		{
-			proxNode = atual->proximo;
-			delete atual;
-			atual = proxNode;
-		}
-		P->topo = NULL;
-	}
-
-	return P;
-}
-
-//Jogador.cpp
-
-int Jogador::contador = 0;
-
-Jogador::Jogador(string nome, int t)
-{
-
-	setNome(nome);
-	this->P = CriarPilha(t);
-	pontuacao = 0;
-}
-
-Jogador::~Jogador() {}
-
-void Jogador::setNome(string n)
-{
-
-	if (n != "\0")
-		nome = n;
-	else
-	{
-		string v[4] = {"Jogador1", "Jogador2", "Jogador3", "Jogador4"};
-
-		nome = v[contador];
-	}
-
-	contador++;
-}
-
-void Jogador::aumentaPontuacao()
-{
-	pontuacao++;
-}
-
-int Jogador::getPontos() const
-{
-	return pontuacao;
-}
-
-string Jogador::getNome() const
-{
-	return nome;
-}
-
-void Jogador::controlaCont(int x)
-{
-	this->contador -= x;
-}
-
-bool Jogador::JogadorEmpilha(No *n)
-{
-
-	if (Empilhar(this->P, n))
-		return true;
-	return false;
-}
-
-PILHA *Jogador::getPilha()
-{
-	return this->P;
-}
-
-void Jogador::LPilha()
-{
-
-	this->P = LiberarPilha(this->P);
-}
-//Jogo.cpp
-
-Jogo::Jogo(int tempoSeq, int tempoGam, int qtdFrutas, string difi)
-{
-	setQtdFrutas(qtdFrutas);
-	setTempoSeq(tempoSeq);
-	setTempoGam(tempoGam);
-	setDificuldade(difi);
-}
-
-Jogo::~Jogo() {}
-
-void Jogo::setTempoSeq(int tempoSeq)
-{
-	if (tempoSeq <= 0)
-	{
-		cout << "Tempo inválido" << endl;
-	}
-	else
-	{
-		tempoSequencia = tempoSeq;
-	}
-}
-
-void Jogo::setTempoGam(int tempoGam)
-{
-	if (tempoGam <= 0)
-	{
-		cout << "Tempo inválido" << endl;
-	}
-	else
-	{
-		tempoGameplay = tempoGam;
-	}
-}
-
-void Jogo::setQtdFrutas(int frutas)
-{
-	if (frutas <= 0)
-	{
-		cout << "Quantidade de frutas inválida" << endl;
-	}
-	else if (frutas > 10)
-	{
-		cout << "Quantidade máxima de frutas atingida" << endl;
-	}
-	else
-	{
-		qtdFrutas = frutas;
-	}
-}
-
-void Jogo::setDificuldade(string difi)
-{
-	if (difi == "Facil" || difi == "Medio" || difi == "Dificil")
-	{
-		dificuldade = difi;
-	}
-	else
-	{
-		cout << "Dificuldade inválida";
-	}
-}
-
-int Jogo::getTempoGam() const
-{
-	return tempoGameplay;
-}
-
-int Jogo::getTempoSeq() const
-{
-	return tempoSequencia;
-}
-
-int Jogo::getQtdFrutas() const
-{
-	return qtdFrutas;
-}
-
-string Jogo::getDificuldade() const
-{
-	return dificuldade;
-}
-
-void Jogo::embaralha(PILHA *P)
-{
-	vector<fruta *> frutas;
-
-	frutas = vet_frutas(qtdFrutas);
-	unsigned seed = chrono::system_clock::now().time_since_epoch().count(); //gera uma "seed" aleatoria
-
-	shuffle(frutas.begin(), frutas.end(), default_random_engine(seed));
-
-	int tam = frutas.size();
-	for (int i = 0; i < tam; i++)
-	{
-		No *N;
-		N = new No;
-		N->f = frutas[i];
-		Empilhar(P, N);
 	}
 }
