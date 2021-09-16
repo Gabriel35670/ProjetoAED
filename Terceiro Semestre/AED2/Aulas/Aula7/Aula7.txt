@@ -1,0 +1,44 @@
+HASH TABLES:
+
+Tabelas de espalhamento.
+
+
+Tanto vetores ordenados, como arvores binarias, como skip lists, vismam manter os itens ordenados e dividir o espaço de busca em cada comparação, com isso, o 
+tempo de busca é de log n, sendo n o nro de itens no espaço de busca.
+
+É possível reduzir esse tempo de busca?
+
+É, uma ideia é ultilizar um vetor diretamente indexado pelas chaves, o tempo de acesso  é constante em relação ao numero de elementos, ou seja O(1), ou seja,
+acessar um vetor, contento deu index.
+
+Se as chaves estiverem num intervalo pequeno, é possível alocar um vetor com mil posições, entretanto, ao olhar de modo amplo, alocar um vetor com 10 milhoes 
+de posições, isso fica inviavel.
+
+Essa estrturua de dados, suporta operações primarias, como busca/inserção, em tempo constante, ou seja, O(1), que não cresce com o nro de elementos, e ocupa
+um numero proporcional de espaço, ao número de elementos.
+
+As Hash tables, suportam operações de busca,inserção e remoção, a eficiencia das operações, depende da hash table, ter tamanho adequado, bom tratamento de colisões
+e uma boa função de espalahamento(hash function).
+
+Sobre as funções de espalhamento: São uteis em contextos, como integridade de dados, validação de RGs e CPFs.
+
+Impelementar uma TS, para armazenar itens que possuam chave e valor, e são distribuidas num universo bem grande.
+
+Vamos usar um vetor de tamanho M, proporcional a |S|, além da função de espalhamento h:U->{0,...,M-1}
+
+
+Limitações:
+
+Facil implementar uma função de espalhamento problemática, ou seja, não espalha bem os dados, além disso, por melhor que seja a função de espalhamento a hase
+table, não tem boa garantia de eficiencia no pior caso, pois sempre existem conjuntos de dados patólogicos, por exemplo, sempre existe chance de todas as chaves em S
+serem mapeadas para a mesma posição.
+
+Como os dados não são ordenados, as operações de máximo, mínimo, sucesso, antecessor, não são eficientes.
+
+
+Continuando:
+
+Colisões são inevitaveis:
+
+Uma colisão ocorre quando a função h mapeia duas chaves diferentes para a mesma posição do vetor. A nossa função de espalhamento foi projetada justamente
+para evitar colisões, mesmo com esses esforços, colisões não podem ser evitadas, e são comuns.

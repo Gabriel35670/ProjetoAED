@@ -1,0 +1,82 @@
+Indice:
+
+Estrutura de acesso auxiliar, usada para melhorar o desempenho na recuperação de registros, possibilitando uma pesquisa, restringida a um subconjunto dos registros,
+e é realizada com certas condições.
+
+Qualquer campo em um arquivo, pode ser usado para criar um indice, afim de ser encontrado.
+
+Indices simples: Contém uma chave de busca, e um campo de referencia, dessa forma, a chave indica o byte offset do registro que deve ser buscado, e está em
+um arquivo auxiliar. Campos e registros de tamanho fixo, no arquivo de indice, mas no arquivo de dados, indifere.
+
+Arquivo de indice:
+
+Possui a forma de organização mais facil de se trabalhar, pois contém campos e registros de tamanho fixo, possui tamanho menor, e possibilita a busca binaria
+em seus registros,e pode ser replicado em memoria principal.
+
+A existencia de indices, não afeta a localização fisica dos registros dos arquivos de dados.
+
+Operações:
+
+->pesquisa
+->Criação
+->Inserção
+->Remoção
+->Atualização
+->Destruição
+->Carregamento
+->Reescrita
+
+Pesquisa:
+
+Baseada na chave de busca, encontra a posição da chave no arquivo de indice, obtém o RRN/byte offset correspondente a posição encontrada, e em seguida encontra
+o registro no arquivo de dados
+
+Criação:
+
+Cria o indice juntamente com a criação do arquivo de dados, registros de cabeçalho, ou cria o indice baseado em um arquivo de dados ja existente, são obtidos
+a partir de uma varredura de dados
+
+Inserção:
+
+Adiciona registros no indice devido as inserções no arquivo de dados, entretanto, se insere um novo registro no arquivo de dados, se insere um novo registro
+no arquivo de indice, e pra isso, é necessario a reorganização do indice, devido a busca binaria
+
+Remoção:
+
+Remoção lógica, reaporveita-se o espaço, podendo ser logica ou fisica, em que pode haver deslocamente dos registros, ou não, com algum tipo de indicador
+que o registro foi removido.
+
+Atualização:
+
+Modifica registros no indice, devido as modificações no arquivo de dados, remoção seguida de uma inserção, ou reordenação do indice, no campo chave, caso não se
+modifique o tamanho chave, muda-se o campo de referencia se o registro mudar fisicamente no arquivo de dados.
+
+Carregamento:
+
+Carrega o arquivo de indice na memoria principal antes de usá-lo, aponta para o primeiro registro do arquivo de indice em disco, varre o arquivo sequencialmente.
+
+Reescrita:
+
+Atualiza o arquivo de indice em disco, com base no arquivo de indice em memoria principal, é necessário um status flag, pois é necessario verificar consistencia
+nos indices
+
+
+OBS:
+
+Simples/Linear: Quando cabe em memoria primaria
+
+Armazenamento em memoria secundaria: Pode requerer varios acessos a disco, por causa da busca binaria, pode ter manutenção mais cara, devido a adição e remoção
+de registros, e requer o uso de outras organizações mais apropriadas, como hash arvore-B
+
+
+Propriedades:
+
+Agrupado: A ordem dos registros no arquivo de dados, é bem proxima da ordem das entradas no arquivo de indice(mais caro)
+
+Nao agrupado: As entradas nao condizem com os registros no arquivo de dados.
+
+Denso: Há uma entrada no indice  que aponta para cada registro no arquivo de dados, tendo uma localização mais rapida do registro, mas ocupa mais espaço, o arquivo
+de dados só é consultado se o argumento de pesquisa está no indice, pode ou não ser agrupado.
+
+Esparso: Nem todos os registros de dados tem uma entrada correspondente no arquivo de índices, há uma entrada no indice por pagina do arquivo, logo, durante
+a busca, o arquivo de dados sempre é consultado, e deve necessariamente ser agrupado, mas exige menos espaço de armazenamento

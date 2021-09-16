@@ -1,0 +1,215 @@
+Arvores binárias de busca altura e balanceamento:
+
+
+Quais operações são úteis nessa "tabela de símbolos":
+
+->Busca = dada uma chave k, devolva um apontador para um objeto com esta chave, caso não exista
+devolva "none"
+
+->min/max = devolva um apontador para um objeto com a menor/maior chave
+
+->predecessor/sucessor = dado uma chave k, devolva um apontador para o objeto com maior/menor 
+chave menor/maior que k, caso não exista devolva "none"
+
+->percurso ordenado = devolva todos os objetos seguindo a ordem de suas chaves
+
+->seleção = dado um inteiro i, entre 1 e n, devolva um apontador para o objeto com a i-esima
+menor chave
+
+->rank = dada uma chave k,devolva o numero de objeto com chave menor ou igual a k
+
+->inserção = dada uma chave e um valor, insira um nova item com esses dados na tabela de
+simbolos
+
+->remoção = dada uma chave k, remova um item com essa chave da tabela de simbolos
+
+Algoritmo que calcula a altura de um arvore binaria:
+
+int altura(Arvore r){
+
+    int hEsq, hDir;
+
+    if(r == NULL)
+        return -1;
+    
+    hEsq = altura(r->esq);
+    hDir = altura(r->dir);
+
+    if(hDir < hEsq)
+        return hEsq+1;
+    return hDir+1;
+}
+
+O estudo das arvores binárias de busca, existe para se adentrar no ambito das tabelas de simbolos
+e para isso, temos a struct dessa arvore binaria da seguinte forma:
+
+typedef int Chave;
+typedef int Cont;
+
+typedef struct noh{
+
+    Chave chave;
+    Cont conteudo;
+    int tam;
+
+    struct noh* pai;
+    struct noh* esq;
+    struct noh* dir;
+
+}Noh;
+
+typedef Noh TS;
+
+Ideia da busca em uma arvore binaria:
+
+Inicia-se na raiz, caso a chave k(que esta sendo buscada) for igual a k, devolva o apontador para o no,
+caso for menor, então procura-se na subarvore a esquerda do no atual, caso for maior, procura-se na
+subarvore direita do no atual, e nesse caso desce para o filho direito, caso se chega em um no NULL, então 
+devolva none
+
+Algoritmo:
+
+Noh *TSbuscaR(Arvore r,Chave chave){
+
+    if(r == NULL)
+        return r;
+    if(r->chave == chave)
+        return r;
+    else
+        if(chave > r->chave)
+            return TSbuscaR(r->dir,chave);
+        else
+            return TSbuscaR(r->esq,chave)
+
+}
+
+Inserção na arvore de busca binaria:
+
+Inicialmente deve-se construir um novo nó, alocando memoria para este, dessa forma:
+
+Noh *novoNoh(Chave chave,Cont conteudo){
+
+    Noh *novo = (Noh*)malloc(sizeof(Noh));
+
+    novo->chave = chave;
+    novo->conteudo = conteudo;
+    novo->pai = NULL;
+    novo->esq = NULL;
+    novo->dir = NULL;
+
+    return novo;
+}
+
+Dessa maneira um novo nó pode ter a memoria alocada, para que seja permitido que ele exista
+e seja adicionado na arvore binaria de busca. Agora deve-se atenta a de fato a função de inserção,
+que se parece muito com a busca, mas ela insere um valor, pois inicia-se na raiz,e caso a chave do 
+valor seja maior que o da raiz, vai para a subarovre da direita, caso for menor ou igual vai para
+a subarvore da esquerda, e isso acontece, ate que haja uma folha, ou um noh com apenas um filho,
+para verificar isso, basta apenas ver se aponta para NULL, e assim, a função de inserção pode ser
+construida da seguinte forma:
+
+Arvore insereR(Arvore r, Noh *novo){
+
+    if(r == NULL) return novo;
+
+    if(novo->chave > r->chave){
+        r->dir = insereR(r->dir,novo);
+        r->dir->pai = r;
+    }
+    else{
+        r->esq = insereR(r->esq,novo);
+        r->esq->pai = r;
+    }
+
+    return r;
+}
+
+TS *TSinserir(TS *tab,Chave chave,Cont conteudo){
+
+    Noh *novo = novoNoh(chave,conteudo);
+    return insereR(tab,novo);
+}
+
+Essa maneira é a função recursiva, que é "MELHOR" que a iterativa.
+
+Finalmente, deve-se construir a operação de remoção, que é a mais complexa das 3 vistas, para isso,
+se localiza ultilizando a busca um objeto x, que será removido, caso esse objeto não exista, então
+não há oque fazer, caso x não possua filhos, remova-o e torne NULL o apontador do pai para ele, caso
+x possuir apenas um filho, conecte diretamente o pai de x, com o filho de x, caso x for a raiz, seu filho
+se torna a nova raiz, agora, caso x possua 2 filhos, troque x pelo objeto y, que antecede x, 
+(ou o maior elemento da subarvore a esquerda de x) e remova x de sua nova posição, podemos fazer
+isso da seguinte forma:
+
+Arvore TSmax(Arvore raiz){
+
+    if(raiz->dir == NULL)
+        return raiz;
+    else
+        return TSmax(raiz->dir);
+}
+
+Arvore removeRaiz(Arvore alvo){
+
+    Noh *aux, *p;
+
+    //Caso 1
+    if(alvo->esq == NULL && alvo->dir == NULL){
+        free(alvo);
+        return NULL;
+    }
+    //Caso 2
+    if(alvo->esq == NULL || alvo->dir == NULL){
+
+        //Se esquerda nao tiver filho
+        if(alvo->esq == NULL)
+            aux = alvo->dir;
+        else //alvo->dir == NULL
+            aux = alvo->esq;
+        aux->pai = alvo->pai;
+        free(alvo);
+
+        return aux;
+    }
+
+    //Caso 3
+    aux = TSmax(alvo->esq); //maior elemento da subarvore à esquerda do alvo
+    alvo->chave = aux->chave;
+    alvo->conteudo = aux->conteudo;
+    p = aux->pai;
+
+    if(p == alvo)
+        p->esq = removeRaiz(aux);
+    else
+        p->dir = removeRaiz(aux);
+    
+    return alvo;
+
+}
+
+TS *TSremover(TS *tab,Chave chave){
+
+    Noh *alvo, *p, *aux;
+    alvo = TSbuscaR(tab,chave);
+
+    if(alvo == NULL)
+        return tab;
+    
+    p = alvo->pai;
+    aux = removeRaiz(alvo);
+
+    if(p == NULL)
+        return aux;
+
+    if(p->esq == alvo)
+        p->esq = aux;
+    if(p->dir == alvo)
+        p->dir = aux;
+
+    return tab;
+}
+
+Como as arvores binarias de busca, tem a maioria de suas operações relativas a altura da prŕopria,
+dessa forma, a arvore que tem a menor altura possível é a arvore binaria de busca balanceada,
+que como é completa(ou quase), suas operações demoram muito menos que as demais arvores, já que 
+sua altura é a menor possivel, tendo em vista n nós, para isso precisamos limitar o crescimento da altura
+da arvore

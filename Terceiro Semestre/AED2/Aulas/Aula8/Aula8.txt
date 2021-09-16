@@ -1,0 +1,181 @@
+Tratando colisões ultilizando listas ligadadas:
+
+Cada posição do vetor é uma lista ligada;
+
+A inserção leva tempo constante, mas a consulta e a remoção dpenede do tamanho da lista, que depende da qualidade da função de espalhamento existente.
+
+Prós: Remoção é mais simples de implementar
+Contra: Ocupa mais espaço
+
+Exemplo de implementação de Hash Tables com listas ligadadas
+
+typedef struct celTS CelTS;
+
+struct celTS{
+
+    Chave chave;
+    Valor valor;
+    CelTS *prox;
+}
+
+static CelTS **tab = NULL;
+static int nChaves = 0;
+static int M; //tamanho da hashtable
+
+
+//INicializar a hashtable
+void stInit(int max){
+
+    int h;
+    M = max;
+    nChaves = 0;
+    tab = mallocSafe(M*sizeof(CelTS *));
+    for(h =0;h<max;h++)
+        tab[h] = NULL;
+}
+
+Valor stSearch(Chave chave){
+
+    CellTS *p;
+    int h = hash(chave,M);
+    p = tab[h];
+
+    //Procurar na lista ligada
+    while(p != NULL && strcmp(p->chave,chave) != 0)
+        p = p->prox;
+
+    if(p != NULL)
+        return p->valor;
+
+    return 0;
+} //Uma solução aqui é passar uma variavel por referencia, e ultilizar uma função do tipo booleano,
+
+
+void stInsert(Chave chave,Valor valor){
+    //inserção ou edição
+
+    CelTS *p;
+
+    int h = hash(chave,M);
+
+    p = tab[h];
+
+    //Verifica se há algum valor na posição h
+    while(p != NULL && strcmp(p->chave,chave))
+        p = p->prox;
+
+    if(p == NULL){
+        p = mallocSafe(sizeof(*p));
+        p->chave = copyString(chave);
+        nChaves += 1;
+        p->prox = tab[h];
+        tab[h] = p;
+    }
+
+    p->valor = valor; //atualiza o valor do item. uma edição
+
+    //Para separar a edição da inserção pode-se fazer um laço muito parecido.
+    //Pode-se adicionar ordem a lista ligada, oque facilita a busca mais eficiente
+}
+
+void stDelete(Chave chave){
+    
+    CelTS *p, *aux;
+
+    int h = hash(chave,M);
+    p = tab[h];
+
+    if(p == NULL){
+        printf("Chave nao encontrada\n");
+        return ;
+    }
+
+    //Dois casos, remoção na cabeça da lista, e remoção no corpo da lista
+    if(strcmp(p->chave,chave) == 0){
+
+        tab[h] = p->prox;
+        free(p->chave);
+        free(p);
+        nChaves--;
+        return;
+    }
+
+    //Remoção no restante da lista, bem mais simples
+    while(p->prox != NULL && strcmp((p->prox)->chave,chave) != 0)
+        p = p->prox;
+
+    //Se o proximo é o valor
+    if(p->prox != NULL){
+        aux = p->prox;
+        p->prox = aux->prox;
+        free(aux->chave);
+        free(aux);
+        nChaves--;
+    }
+
+    return ;
+
+}
+
+void stFree(){
+
+    CellTS *p = NULL, *q = NULL;
+    int i;
+    for(i =0;i<M;i++){//libera cada lista antes de liberar o tab 
+        p = tab[h];
+        while(p != NULL){
+            q = p;
+            p = p->prox;
+            free(q->chave);
+            free(q);
+        }
+    }
+
+    //Liberou todas as listas apontadas por tab
+    free(tab)
+    tab = NULL
+    nChaves = 0;
+
+    return;
+}
+
+
+Tratamento de colisões usando endereçamento aberto
+
+Se a posição estiver ocupada, encontre outra seguindo alguma regra específica
+
+Sondagem(Probing), se a posição estiver ocupada, calcula-se um offset.
+
+Na sondagem linear, o numero offset segue uma função linear com o numero de tentativas de re-enderaçmento i 
+
+Geralmente essa abordagme costuma gerar alglomeração no endereço, mas de fato é muito simples de se implementar
+
+Sondagem Quadrática: OFFSET segue uma função quadrática a partir da posição inicial, ou seja, por i², e impede a formação dos blocos aglomerados, e por isso é
+melhor que a sondagem linear
+
+UMa abordagem melhor, seria o re-espalhamento, ou rehashing, abordagem em que o offset é calculado usando uma outra função de hash g() sobre a chave,
+e evita aglomerações já que cada chave é re-espelhada com um offset próprio
+
+Considerações sobre endereçamento aberto:
+
+Prós: Endereçamento aberto ocupa menos espaço
+Contra: Número de elementos limitado ao tamanho da tabela, e a remoção é a mais complicada de implementar
+
+Opções para remoção:
+
+-Uso de lápides, que marcam que uma posição foi previamente ocupaa, ou seja, um marcador que indica que existia alguem no lugar alice, além disso, deve-se 
+reinserir/respalhar todas as posições, que de certa forma é ruim.
+
+
+Carga de uma tabela Hash:
+
+A carga load de uma tabela hash é |S| / M, sendo que S é o conjunto de dados armazenados e M o tamanho da tabela Hash.
+
+Numa tabela Hash com listas ligada, o tempo de acesso esperado é da ordem de 1 + carga, isso por que é necessáio tempo constante para resolver a hash function
+e chegar na posição da tabela, entretanto, existem também o tempo de percorrer a lista ligada, que tem comprimento médio de S/M, já que são S itens espalhados
+por M posições. Ou seja, é de suma importancia que a hash function espalhe bem os itens, para não haver aglomeração, caso contrário a eficiencia diminui drasticamente.
+
+No pior caso, se todos os itens forem direcionados para a mesma posição teremos a ineficiencia de uma única lista ligada.
+
+é IMPORTANTE que a carga não passe de 70% caso isso aconteça, pode ser necessario efetuar um redimensionamento da tabela hash, para isso, se ultiliza um vetor de tamanho
+2M, e deve-se ultilizar um número primo maior, para espalhar bem as chaves.

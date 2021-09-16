@@ -1,0 +1,143 @@
+Organização de arquivos para desempenho:
+
+Temos que pensar em complexidade de espaço e complexidade de tempo, em que a complexidade de espaço tras a ideia de reuso de espaço e de compressão de dados.
+
+Compressão:
+
+Codificação da informação de modo que o arquivo ocupe menos espaço, gerando uma transmissão mais rapida, um processamento sequencial mais eficiente, e ultiliza
+menos espaço para armazenamento.
+
+Existem diversas técnica, em que algumas são gerais, e outras são usadas apenas em casos específicos.
+
+
+Notação diferenciada:
+
+Códigos de estado, aramazenados na forma de texto: 2 bytes, ex: 50 estados americanos, 2 bytes para a representação de caractere, a alternativa é ultilizar
+6 bits, pois é possível guardar a informação em 1 byte, economizando 50% do espaço, entretanto, a legebilidade é deficiente, e tem uma necessidade de Codificação
+para ler.
+
+Omissão de sequências repetidas:
+
+Ex: 22 23 24 24 24 24 24 24 24 25 26 26 26 26 26 25 24
+
+Usando 0xff como código indicador de repetição(código de run-length):
+
+    22 23 ff 24 07 25 ff 26 06 25 24
+
+O ff representa o indicador que terá alguma repetição, o próximo número ao ff representa o número de fato que será repetido, e o número apos o numero de fato
+é o numero de repetições
+
+Exemplos de uso: Aplicações que possuem dados esparsos ou com muita repetição, como imagens de céu.
+
+Mas nem sempre garante redução de espaço, e para imagens com muitas variações não pode ser usado.
+
+
+Código de HuffMan
+
+Ideia: Valores mais frequentes são associados a códigos menores, ou seja, se letrar que ocorrem com frequência têm códigos menores, as cadeias tendem a ficar
+mais curtas, requer informação sobre a frequencia de ocorrencia de cada simbolo a ser codificado, e é muito usado para codificar texto.
+
+O código determina a probabilidade de ocorrencia de cada valor, constroi uma arvore binaria, e cada caminho da arvore representa um código para um valor,
+e valores mais frequentes são associados a caminhos mais curtos.
+
+Ex: Alfabeto{A,B,C,D}
+
+Frequecia: A > C >B = D 
+
+Possível codificação:
+
+    A=0,B=110,C=10,D=111
+    Cadeia: ABACCDA
+    Código: 0110010101110
+
+A codificação não pode ser ambigua
+
+
+
+Técnica de compressão irreversíveis
+
+As técnicas acima eram todas reversíveis, mas algumas são irreversíveis.Por exemplo:
+
+Salvar uma imagem de 400 por 400 pixels como 100 por 100 pixels, trocando-se 16 pixels por 1, uma parte a da informação será perdia, e por isso, ultiliza esse 
+método quando a informação perdida é de pouco ou nenhum valor.
+
+
+Manipulaçao de dados: OPerações básica.
+
+Adição de registros;
+Remoção de registros;
+Atualização de registros(eliminação + adição)
+
+QUando um registro é removido, deve-se posteriormeente reultilizar o espaço do registro.
+
+Compactação: Busca por regiões do arquivo que não contém dados, ou recupera os espaço perdidos
+
+Abordagem estática:
+
+Remoção do reg -> gera espaço sem dados uteis -> o pro "compactador" reagrupa os registros e diminui o tamanho do arquivo
+
+Técnica para reconhecer registros removidos: Remoção lógica
+
+->Atribuir um vlaor para um campo do registro
+->Usar um campo extra
+
+Registros removidos são marcados, porem nao são reaproveitados, novas inserções são realizadas no final do arquivo, buscas desconsideram os registros marcados
+como removidos, após isso, executando-se o programa compactador, todos os registros removidos são descartados.
+
+Essa técnica pode ser aplicada a registros de tamanho fixo, e registros de tamanho variável, e se aplica a técnica, com certa frequencia, que depende da aplicação,
+da porcentagem de registros marcados como removidos, ex: toda noite em certas datas, no final do ano , a cada semestre.
+
+
+Abordagem dinâmica:
+
+Em aplicações interativas que acessam arquivos altamente voláteis, pode ser necessário um processo dinâmico de recuperação de espaços vazios, para isso, deve-se:
+
+Marcar registros apagados, identificar os registros marcados, localizar os espaços antes ocupadas por esses registros.
+
+Para localizar os espaços vazios:
+
+Reg de tamanho fixo: Lista encadeada de registros eliminados no própri arquivo, lista constitui-se de espaços vagos, endereçados por meio de seus RRNs, um registro
+eliminado contém o RRN do proximo registro eliminado, e inserção e remoção ocorrem no topo, ou seja, trata-se de uma pilha.
+
+Como localizar espaços vazios, em registros de tamanho variável:
+
+Lista encadeada modificada:
+
+->Como ligar os registros removidos dentro da lista
+->Algoritmo para inserir novos registros na lista
+->Algoritmos para encontrar e remover registros da lista quando necessário.
+
+Solução:
+
+Indicador de tamanho para cada registro
+
+Para a ligação dos registros:
+
+Marcação dos registros eliminados via um marcados especial, campo de ligação binário para o próximo registro removido, contém o byte offset a partir do início do arquivo
+não é possível usar RRNs, registros de tamanho variável.
+
+Solução:
+
+Para inserir novos registros, coloca-se o novo registro na frente da lista, como uma pilha, para encontrar e usar o espaço do registro, realiza-se uma busca
+sequencial na lista, se encontrou um espaço do tamanho certo, entao reultiliza o espaço ultilizando uma estrátegia de alocação, caso contrário armazena o registro
+no final do arquivo, o tamanho do registro que foi removido deve ser do tamanho certo, ou seja, "grande o suficiente" para que os dados do novo registro usem aquele
+espaço.
+
+Estrátegias de alocação First-Fit:
+
+Ultiliza o primeiro espaço que servir.
+
+Tem como desvantagem a fragmentação interna.
+
+Para combater a fragmentação interna: Coloca-se o espaço que sobrou na lista de espaços disponíveis
+
+Estratégia de alocação best-Fit:
+
+Escolhe o espaço mais justo possível, mas gera fragmentação externa.
+
+A lista de espaços livres é organizada de forma ascendente
+
+
+Worts-Fit:
+
+Escolhe o maior espaço possível, a vantagem é que diminui a fragmentação externa, entretanto, aumenta consideravelmente a fragmentação interna.

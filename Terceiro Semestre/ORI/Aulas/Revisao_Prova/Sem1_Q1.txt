@@ -1,0 +1,113 @@
+Questionário 1, semana 1:
+
+Posição corrente:
+
+A leitura e escrita no arquivo, ocorrem a partir da poisção corrente, ou seja, se a posição for 10, então a escrita será feita na posição 10.
+-Apos uma leitura ou escrita, a posição corrente é avançada para imediatamente apos o ultimo byte lido/escrito
+-Pode-se realizar uma mudança de posição corrente, apenas informando a posição desejada para realizar a escrita/leitura
+-As chamadas read/write, não informam uma posição corrente a ser lida e escrita.
+
+
+Conceito de arquivo:
+
+-Nome,tipo,localização no disco e tamanho são atributos de um arquivo
+-Existe diversos tipos de arquivos, cada um com sua particularidade, relacionada a estrutura, como arquivo txt ou bin.
+-Vários processos podem simultaneamente abrir um mesmo arquivo
+-Para acessar um arquivo é necessário mais do que apenas o login e senha do usuario.
+-Um arquivo é armazenado em disco, como uma sequencia de bits, independetemente do fato dele ser um texto,uma planilha,uma figura,uma fotografia,uma musica, um
+conjunto dr arquvios compactados
+-O mesmo descritor de arquivo pode residir simultaneamente em memoria primaria e em memoria secundária
+-O file handler é um número/ponteiro que representa o arquivo lógico o qual é associado ao arquivo físico que foi aberto ou criado
+-Um descritor de arquivo é um registro localizado no inicio do arquivo
+
+Memoria Primaria x Memoria Secundaria:
+
+-A capacidade de aramazenamento RAM é muito menor que a capacidade de aramazenamento em disco.
+-O tempo de acesso a RAM é muito mais veloz que o tempo de acesso a disco
+-Tanto RAM, quanto disco permitem acesso sequencial e aleatorio
+-Apenas o disco permite o aramazenamento persistente, a RAM não guarda informações por muito tempo
+
+Bufferização:
+
+-Um buffer é uma area de memoria volatil que armazena de forma replicada e temporaria os dados armazenados no disco
+-Existem diferentes tipos de buffer, como exemplo o buffer, dos próprios disco, o buffer da controladora de disco e o buffer do processos
+-Um buffer nao acrescenta funcionalidade adicional àquelas oferencias pelo são
+
+
+TDAA x TAAP:
+
+-TDAA E TAAP são mantidas em memória primária e são gerenciadas pelo são
+
+
+Organização da informação:
+
+-Discos são dividos em pratos, que são divididos em superficies, que são divididos em trilhas, que são dividas em setores
+-Um cilindro é um conjunto de trilhas sobrepostas , de forma que todos os dados das trilhas sejam lidos em um único acesso
+-A superficie da fita magnetica pode ser vista como um conjunto de trilhas paralelas, cada qual sendo uma sequência de bits
+-O movimento mais lento da operação é o movimento de Seeking
+
+
+Fragmentação interna e Páginas de disco:
+
+-Uma página de disco pode ser recuperada em apenas um único acesso a disco
+-A paágina de disco tem seu tamanho determinado pelo SO, e todas tem tamanho igual
+
+
+Por que é necessário o uso de duas tabelas para gerenciar informação dos arquivos em memoria primária:
+
+Porque existem dois tipos de informação: as que dependem dos processos e as que nao dependem dos processos. As informações que nao dependem dos processo são 
+armazenadas na TDAA, cada entrada da TDAA representa um descritor de um arquivo aberto, esse descritor é uma estrutura que contém dados do arquivo, como nome,
+data de criação, localização no disco.
+
+As informações que dependem de um processo, por exemplo posição corrente, são armazenadas no TAAP, cada entrada no TAAP possui no minimo a posição corrente
+do arquivo , o tipo do processo(leitura/escrita), e um ponteiro para o descritor de arquivo armazenado no TDAA.
+
+Um file handler corresponde a uma entrada na TAAP, para um dado processo, há um file handler para cada arquivo manipulado pelo processo, o file handler,
+aponta para um descritor de arquivo armazenado na TDAA.
+
+
+Buffer-Pool?SUa funcionalidade?Funcionamento de acordo com a política de substituição LRU?
+
+Um buffer-Pool consiste em parte da memoria primaria, usada para armazenar blocos de disco, oque evita o constante acesso a disco.
+
+Quando um buffer-pool está cheiio, pode-se usar a politica do menos recenetemente usado, para a substituição de um bloco que esteja no buffer-pool, ou seja, 
+o bloco que está no buffer pool e foi menos recenetemente usado é atualizado em disco, e etnão removido do buffer-pool para que um novo bloco ainda não presente 
+no buffer-pool seja lido do disco e inserido em seu lugar, é importante lembrar que esse novo bloco foi inicialmente procurado no buffer-pool, para posteriormente 
+ser procurado no disco.
+
+A política LRU pode ser implementada por meio de uma lista duplamente encadeada, quando um bloco é requerido, ele é colocado no ínicio da lista, mesmo se ele já
+estiver no buffer-pool, mas em outra posição, quando o buffer-pool estiver cheio e existir a necessidade de inserção de um novo bloco, o bloco que estiver no final 
+da lista é removido para dar lugar a um novo bloco.
+
+
+Operação de Seeking, pq deve ser minimizá-la?
+
+A operação de Seeking é quando se posiciona a cabeça de Escrita/Leitura sobre a trilha e o setor desejado. Deve ser reduzida, pois é a operação mais lenta, visto
+que acessa todas as trilhas/setores para encontrar o local desejado
+
+Quais os custos considerados no custo de acesso a um disco?
+
+Deve-se levar em conta o tempo que demora para acessá-lo, logo as operações de Seeking, Rotation, e Transfer, dessa forma o custo dessas operações, pode
+ser expressa por Total = Seek time + Rotation delay + Transfer time.
+
+Oque é Página de Disco, qual a necessidade de usar página de disco, e cite sinonimos de páginas de disco:
+
+Uma página de disco é um conjunto de stores logicamente contínuos no disco que é ultilizado para aramzenar dados/arquivos de forma a evitar o maior acesso ao disco,
+pode ser chamada também de Clusters ou de bloco de disco.
+
+Capacidade de armazenamento de um disco com a seguinte config:
+-N BYTES SETOR = 256
+-N SETORES/TRILHA = 31
+-N TRILHAR/CILINDRO = 32
+-N CILINDO = 2046
+
+256 * 31 = 7936 bytes(uma trilha)
+7936 * 32 = 253.952 bytes(um cilindro)
+253.952 * 2.046 = 519.585.792 bytes em um disco
+
+Considerando esse disco, quantos cilindors são necessários para armazenar um arquivo com 10.000 registros de 128 bytes:
+
+256 / 128 = 2 registos por setor
+10.000 / 2 = 5.000 setores necessários
+31 * 32 = 992 setores/cilindro
+5.000 / 992 = 5 cilindros

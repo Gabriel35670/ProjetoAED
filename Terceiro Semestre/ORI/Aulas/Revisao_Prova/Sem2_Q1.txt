@@ -1,0 +1,89 @@
+Questionaria 1, Semana 2:
+
+[Registro]
+RA (16 bytes)
+Nome (32 bytes)
+Email (32 bytes)
+
+[Dados]
+RA = 12345678
+Nome = AndrebSilvabOliveira
+Email = andre.silva@exemplo
+
+RA = 12345
+Nome = BeatrizbSantos
+Email = beatriz.santos@exemplo
+
+RA = 1234567890123456
+Nome = CarlosbSouza
+Email = carlos.souza@exemplo
+
+Para facilitar, o número de caracteres nos dados são:
+(8+20+19)=47. (5+14+22)=41. (16+12+20)=48.
+
+Considere campos e registro de tamanho fixo, para cada um dos registros armazenados no arquivo indiqiue o RRN e o byte offsett
+
+Registro 1- RRN = 0 Byter offset = 0
+Registro 2- RRN=1 Byte offset = 80
+Registro 3-RRN=2 Byte offset = 160
+
+
+Considere campos delimitados por | e registros delimitados por #(de tamanho variavel), indique o RRN e o byte offset
+
+Registro 1- RRN = 0 Byter offset = 0
+Registro 2- RRN=1 Byte offset = 51
+Registro 3-RRN=2 Byte offset = 96
+
+Considere campos delimitados por | e registro de tamanho fixo, represente como os dados seriam armazenadas no arquivo:
+
+12345678|AndrebSilvabOliveira|andre.silva@exemplo|bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb12345|BeatrizbSantos|beatriz.santos@exemplo|bbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb1234567890123456|CarlosbSouza|carlos.souza@exemplo|bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+
+Considere campos organizados em tags da forma CAMPO=VALOR, delimitados por | e registros com indicadores de tamanho
+
+64RA=12345678|Nome=AndrebSilvabOliveira|Email=andre.silva@exemplo|58RA=12345|Nome=BeatrizbSantos|Email=beatriz.santos@exemplo|65RA=
+1234567890123456|Nome=CarlosbSouza|Email=carlos.souza@exemplo|
+
+Data no formato ‘DD/MM/AA’ (8 bytes)
+Nome da primeira seleção (20 bytes)
+Nome da segunda seleção (20 bytes)
+Número de gols da primeira seleção (2 bytes)
+Número de gols da segunda seleção (2 bytes)
+Nome da seleção vencedora (20 bytes)
+
+
+Considere o registro com tamanho fixo, e páginas de disco de 4KB(4096 bytes), qual o tamanho dos registros que voce deve usar para
+que cada registro possa ser lido em um único acesso a disco
+
+72 bytes tem o registro -> 128 bytes deve ter uma página de disco.
+
+
+Organizar os registros de forma que cada registro caiba em uma pagina de disocp otimiza o tempo de acesso por que diminui, o tempo 
+de operação seek necessárias para ler cada registro.
+
+
+Ultilizar campos de tamanho variável com indicador de tamanho possui como desvantagem na pesquisa por um determinado campo, a Necessidade
+de suscessivas leituras no indicador de tamanho e desloamento para o inicio do proximo campo.
+
+Ultilizar campos com tamano fixo possui como desvantagem o desperdicio de espaço de armazenamento se o tamanho escolhido para o campo
+for muito maior do que o tamanho dos dados armazenados naquele campo
+
+O uso de tags garante maior semântica aos dados armazenados, mas introduz como desvantagem o desperdício de espaço armazenado para armazenar
+essas tags em todos os registros
+
+Em arquivos com registro de tamanho fixo, não é apropriado usar um ínidice para guardar os valores de RRM dos registros
+
+Busca Sequencial x Acesso direto:
+
+Busca sequencial: Busca pelo registro que tem uma determinada chave em um arquivo. Lê o arquivo, registro a registro.
+
+Acesso direto: Realiza um seeking direto para o início do registro desejado (ou do setor que o contém) e lê o registro imediatamente.
+
+Organização de arquivos x Acesso a arquivos:
+
+Organização de arquivos refere-se à forma como os registros e campos estão organizados dentro do arquivo 
+(ex.: registros de tamanho fixo, registros de tamanho variável).
+
+Acesso a arquivos refere-se a como os dados armazenados no arquivo podem ser recuperados: por meio de acesso sequencial e por meio 
+de acesso direto.
